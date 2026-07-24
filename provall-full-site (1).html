@@ -1,0 +1,1796 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ProVall — Prove it. Don't say it.</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+CjxkZWZzPgo8bGluZWFyR3JhZGllbnQgaWQ9ImciIHgxPSIwIiB5MT0iMCIgeDI9IjEiIHkyPSIxIj4KPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzBEOTQ4OCIvPgo8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiMwRjEzMjkiLz4KPC9saW5lYXJHcmFkaWVudD4KPC9kZWZzPgo8cmVjdCB4PSIyIiB5PSIyIiB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHJ4PSIxNCIgZmlsbD0idXJsKCNnKSIvPgo8cGF0aCBkPSJNMjIgMjYgYTEwIDEwIDAgMCAxIDIwIDAgdjgiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI0Y0RkJGQSIgc3Ryb2tlLXdpZHRoPSI0IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz4KPHJlY3QgeD0iMTgiIHk9IjM0IiB3aWR0aD0iMjgiIGhlaWdodD0iMjIiIHJ4PSI1IiBmaWxsPSIjRjRGQkZBIi8+CjxjaXJjbGUgY3g9IjMyIiBjeT0iNDIiIHI9IjMiIGZpbGw9IiMwRjEzMjkiLz4KPHJlY3QgeD0iMzAiIHk9IjQ0IiB3aWR0aD0iNCIgaGVpZ2h0PSI3IiByeD0iMS41IiBmaWxsPSIjMEYxMzI5Ii8+CjxjaXJjbGUgY3g9IjQ2IiBjeT0iNDciIHI9IjkiIGZpbGw9IiMzNEQ4QzYiIHN0cm9rZT0iIzBGMTMyOSIgc3Ryb2tlLXdpZHRoPSIxLjUiLz4KPC9zdmc+">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+  :root{
+    --ink:#0F1329;
+    --panel:#181D3D;
+    --panel-2:#1E2450;
+    --line:#2C3466;
+    --text:#E9ECF7;
+    --muted:#8B92BE;
+    --teal:#34D8C6;
+    --teal-dim:#1D4A47;
+    --amber:#FFB648;
+    --coral:#FB7185;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--ink);
+    color:var(--text);
+    font-family:'Inter',sans-serif;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 28px;}
+  section{padding:100px 0;}
+  @media (max-width:700px){ section{padding:64px 0;} .wrap{padding:0 20px;} }
+
+  h1,h2,h3{font-family:'Space Grotesk',sans-serif;font-weight:700;letter-spacing:-0.01em;}
+  .mono{font-family:'JetBrains Mono',monospace;}
+  .eyebrow{
+    font-family:'JetBrains Mono',monospace;
+    font-size:12.5px;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    color:var(--teal);
+    margin-bottom:16px;
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .eyebrow::before{
+    content:'';
+    width:6px;height:6px;border-radius:50%;
+    background:var(--teal);
+    box-shadow:0 0 0 4px var(--teal-dim);
+  }
+
+  /* ---------- NAV ---------- */
+  nav{
+    position:sticky;top:0;z-index:50;
+    background:rgba(15,19,41,0.85);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  nav .wrap{
+    display:flex;align-items:center;justify-content:space-between;
+    padding-top:18px;padding-bottom:18px;
+  }
+  .nav-logo{
+    font-family:'Space Grotesk',sans-serif;
+    font-weight:700;font-size:19px;
+    display:flex;align-items:center;gap:10px;
+  }
+  .app-icon-mark{
+    width:28px;height:28px;flex-shrink:0;
+    border-radius:8px;
+  }
+  .nav-links{display:flex;gap:32px;font-size:14.5px;color:var(--muted);}
+  .nav-links a:hover{color:var(--text);}
+  @media (max-width:700px){ .nav-links{display:none;} }
+  .btn-nav{
+    background:var(--teal);color:var(--ink);
+    font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:14px;
+    padding:9px 18px;border-radius:8px;border:none;cursor:pointer;
+  }
+  .btn-nav-ghost{
+    background:transparent;color:var(--text);
+    border:1px solid var(--line);
+    font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:14px;
+    padding:9px 18px;border-radius:8px;cursor:pointer;
+  }
+  .btn-nav-ghost:hover{border-color:var(--teal);}
+  @media (max-width:640px){ #navLinks{display:none;} }
+
+  /* ---------- HERO ---------- */
+  .hero{padding-top:88px;padding-bottom:60px;}
+  .hero-grid{
+    display:grid;grid-template-columns:1.1fr 0.9fr;gap:64px;align-items:center;
+  }
+  @media (max-width:900px){ .hero-grid{grid-template-columns:1fr;gap:48px;} }
+  .hero h1{
+    font-size:52px;line-height:1.06;letter-spacing:-0.02em;margin-bottom:22px;
+  }
+  .hero h1 .accent{color:var(--teal);}
+  @media (max-width:700px){ .hero h1{font-size:36px;} }
+  .hero p.lead{
+    font-size:18px;color:var(--muted);max-width:480px;margin-bottom:34px;
+  }
+  .hero-ctas{display:flex;gap:14px;flex-wrap:wrap;}
+  .btn-primary{
+    background:var(--teal);color:var(--ink);
+    font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:15px;
+    padding:14px 24px;border-radius:10px;border:none;cursor:pointer;
+  }
+  .btn-secondary{
+    background:transparent;color:var(--text);
+    border:1px solid var(--line);
+    font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:15px;
+    padding:14px 24px;border-radius:10px;cursor:pointer;
+  }
+  .btn-secondary:hover{border-color:var(--teal);}
+
+  /* ---------- HERO SIGNATURE: live handshake animation ---------- */
+  .handshake-card{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:18px;
+    padding:32px 24px;
+  }
+  .handshake-row{
+    display:flex;align-items:center;justify-content:space-between;
+    margin-bottom:22px;
+  }
+  .party{
+    display:flex;flex-direction:column;align-items:center;gap:10px;flex:1;
+  }
+  .party .avatar{
+    width:52px;height:52px;border-radius:14px;
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:16px;
+    background:var(--panel-2);border:1px solid var(--line);color:var(--muted);
+    transition:all .4s ease;
+  }
+  .party .label{font-size:12px;color:var(--muted);font-family:'JetBrains Mono',monospace;}
+  .party.active .avatar{
+    border-color:var(--teal);color:var(--teal);
+    box-shadow:0 0 0 4px var(--teal-dim);
+  }
+  .handshake-line{
+    flex:0.8;height:2px;background:var(--line);
+    position:relative;margin:0 6px 28px;
+    overflow:hidden;
+  }
+  .handshake-line .pulse{
+    position:absolute;top:0;left:-40%;width:40%;height:100%;
+    background:linear-gradient(90deg,transparent,var(--teal),transparent);
+    opacity:0;
+  }
+  .handshake-line.flowing .pulse{
+    animation:flow 1.4s ease-in-out infinite;
+    opacity:1;
+  }
+  @keyframes flow{
+    0%{left:-40%;}
+    100%{left:100%;}
+  }
+  .handshake-status{
+    background:var(--ink);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:14px 16px;
+    font-family:'JetBrains Mono',monospace;
+    font-size:12.5px;
+    color:var(--muted);
+    text-align:center;
+    min-height:20px;
+    transition:border-color .3s ease, color .3s ease;
+  }
+  .handshake-status.ok{border-color:var(--teal);color:var(--teal);}
+  .handshake-code{
+    font-family:'JetBrains Mono',monospace;
+    font-size:22px;letter-spacing:0.25em;
+    text-align:center;color:var(--text);
+    margin:16px 0;
+  }
+
+  /* ---------- PROBLEM ---------- */
+  .problem{border-top:1px solid var(--line);}
+  .problem-grid{
+    display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:start;
+  }
+  @media (max-width:800px){ .problem-grid{grid-template-columns:1fr;} }
+  .problem h2{font-size:34px;margin-bottom:18px;max-width:420px;}
+  .problem p{color:var(--muted);font-size:16px;max-width:440px;}
+  .quote-card{
+    background:var(--panel);border:1px solid var(--line);border-radius:14px;
+    padding:26px 24px;
+  }
+  .quote-card .quote-line{
+    font-family:'JetBrains Mono',monospace;
+    font-size:14.5px;color:var(--coral);
+    padding:10px 0;border-bottom:1px dashed var(--line);
+  }
+  .quote-card .quote-line:last-child{border-bottom:none;}
+
+  /* ---------- HOW IT WORKS ---------- */
+  .how{border-top:1px solid var(--line);}
+  .how h2{font-size:34px;margin-bottom:12px;}
+  .how > .wrap > p{color:var(--muted);font-size:16px;margin-bottom:52px;max-width:520px;}
+  .steps{
+    display:grid;grid-template-columns:repeat(4,1fr);gap:22px;
+  }
+  @media (max-width:900px){ .steps{grid-template-columns:1fr 1fr;} }
+  @media (max-width:520px){ .steps{grid-template-columns:1fr;} }
+  .step{
+    background:var(--panel);border:1px solid var(--line);border-radius:14px;
+    padding:24px 20px;position:relative;
+  }
+  .step .num{
+    font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--teal);
+    margin-bottom:14px;
+  }
+  .step h3{font-size:16.5px;margin-bottom:8px;}
+  .step p{font-size:13.5px;color:var(--muted);}
+
+  /* ---------- SECURITY ---------- */
+  .security{border-top:1px solid var(--line);}
+  .security-grid{
+    display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:44px;
+  }
+  @media (max-width:800px){ .security-grid{grid-template-columns:1fr 1fr;} }
+  @media (max-width:520px){ .security-grid{grid-template-columns:1fr;} }
+  .sec-card{
+    background:var(--panel);border:1px solid var(--line);border-radius:14px;
+    padding:22px 20px;
+  }
+  .sec-card .icon{
+    width:38px;height:38px;border-radius:10px;
+    background:var(--teal-dim);border:1px solid var(--teal);
+    display:flex;align-items:center;justify-content:center;
+    margin-bottom:16px;
+  }
+  .sec-card .icon svg{width:18px;height:18px;stroke:var(--teal);}
+  .sec-card h3{font-size:15.5px;margin-bottom:8px;}
+  .sec-card p{font-size:13.5px;color:var(--muted);}
+
+  /* ---------- BUSINESS ---------- */
+  .business{border-top:1px solid var(--line);}
+  .business-inner{
+    background:var(--panel);border:1px solid var(--line);border-radius:20px;
+    padding:52px 44px;
+    display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;
+  }
+  @media (max-width:800px){ .business-inner{grid-template-columns:1fr;padding:36px 26px;} }
+  .business h2{font-size:30px;margin-bottom:16px;}
+  .business p{color:var(--muted);font-size:15.5px;margin-bottom:20px;}
+  .business ul{list-style:none;}
+  .business li{
+    font-size:14.5px;color:var(--text);padding:9px 0;
+    border-bottom:1px dashed var(--line);
+    display:flex;align-items:center;gap:10px;
+  }
+  .business li:last-child{border-bottom:none;}
+  .business li::before{
+    content:'';width:6px;height:6px;border-radius:50%;
+    background:var(--teal);flex-shrink:0;
+  }
+  .biz-stats{display:flex;flex-direction:column;gap:18px;}
+  .biz-stat{
+    background:var(--ink);border:1px solid var(--line);border-radius:12px;
+    padding:18px 20px;
+  }
+  .biz-stat .n{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:26px;color:var(--teal);}
+  .biz-stat .l{font-size:12.5px;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-top:4px;}
+
+  /* ---------- SIGNUP ---------- */
+  .signup{border-top:1px solid var(--line);text-align:center;}
+  .signup h2{font-size:34px;margin-bottom:12px;}
+  .signup p{color:var(--muted);font-size:16px;margin-bottom:36px;max-width:460px;margin-left:auto;margin-right:auto;}
+  .signup-form{
+    display:flex;gap:10px;max-width:420px;margin:0 auto;flex-wrap:wrap;justify-content:center;
+  }
+  .signup-form input{
+    flex:1;min-width:220px;
+    background:var(--panel);border:1px solid var(--line);color:var(--text);
+    font-size:14.5px;border-radius:10px;padding:13px 16px;
+  }
+  .signup-form input:focus{outline:none;border-color:var(--teal);}
+  .signup-note{
+    margin-top:16px;font-size:12px;color:var(--muted);font-family:'JetBrains Mono',monospace;
+  }
+  .signup-success{
+    display:none;
+    background:var(--teal-dim);border:1px solid var(--teal);color:var(--teal);
+    border-radius:10px;padding:14px 18px;max-width:420px;margin:0 auto;
+    font-family:'JetBrains Mono',monospace;font-size:13.5px;
+  }
+
+  /* ---------- FOOTER ---------- */
+  footer{border-top:1px solid var(--line);padding:40px 0;}
+  footer .wrap{
+    display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;
+  }
+  footer .f-logo{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:15px;display:flex;align-items:center;gap:8px;}
+  footer .f-note{font-size:12.5px;color:var(--muted);}
+
+
+  *{box-sizing:border-box;margin:0;padding:0;}
+  #authStage{
+    display:flex;
+
+    background:
+      radial-gradient(1200px 600px at 15% -10%, rgba(52,216,198,0.09), transparent 60%),
+      radial-gradient(900px 500px at 100% 10%, rgba(255,182,72,0.06), transparent 60%),
+      var(--ink);
+    color:var(--text);
+    font-family:'Inter',sans-serif;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+  }
+  #authStage h1, #authStage h2, #authStage h3{font-family:'Space Grotesk',sans-serif;font-weight:700;letter-spacing:-0.01em;}
+  #authStage .mono{font-family:'JetBrains Mono',monospace;}
+
+  /* ---------- HEADER ---------- */
+  #authStage header{
+    padding:26px 32px;
+    display:flex;align-items:center;justify-content:space-between;
+  }
+  #authStage .logo{
+    font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:19px;
+    display:flex;align-items:center;gap:8px;
+  }
+  #authStage .logo .dot{
+    width:9px;height:9px;border-radius:50%;
+    background:var(--teal);box-shadow:0 0 0 4px var(--teal-dim);
+  }
+  #authStage header .tagline{font-size:13px;color:var(--muted);font-family:'JetBrains Mono',monospace;}
+  @media (max-width:600px){ #authStage header .tagline{display:none;} }
+
+  /* ---------- MAIN STAGE ---------- */
+  #authStage main{
+    flex:1;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:24px;
+  }
+  #authStage .stage{
+    width:100%;
+    max-width:440px;
+  }
+  #authStage .stage.wide{
+    max-width:920px;
+  }
+
+  /* ---------- DASHBOARD (post sign-in / signup) ---------- */
+  #authStage .dash-hero{
+    text-align:center;
+    margin-bottom:44px;
+  }
+  #authStage .dash-hero .step-eyebrow{justify-content:center;}
+  #authStage .dash-hero h2{font-size:32px;margin-bottom:10px;}
+  #authStage .dash-hero .sub{max-width:480px;margin:0 auto;}
+
+  #authStage .action-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:18px;
+  }
+  @media (max-width:760px){ #authStage .action-grid{grid-template-columns:1fr;} }
+
+  #authStage .action-card{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:16px;
+    padding:26px 22px;
+    display:flex;
+    flex-direction:column;
+    text-align:left;
+  }
+  #authStage .action-card .icon{
+    width:42px;height:42px;border-radius:10px;
+    background:var(--teal-dim);border:1px solid var(--teal);
+    display:flex;align-items:center;justify-content:center;
+    margin-bottom:18px;
+  }
+  #authStage .action-card .icon svg{width:19px;height:19px;stroke:var(--teal);}
+  #authStage .action-card h3{font-size:16.5px;margin-bottom:8px;}
+  #authStage .action-card p{font-size:13.5px;color:var(--muted);line-height:1.5;margin-bottom:20px;flex:1;}
+  #authStage .action-card .go-link{
+    display:inline-flex;align-items:center;gap:6px;
+    font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:13.5px;
+    color:var(--teal);text-decoration:none;
+    background:none;border:none;padding:0;cursor:pointer;
+  }
+  #authStage .action-card .go-link svg{width:14px;height:14px;stroke:var(--teal);}
+
+  #authStage .dash-footer-row{
+    display:flex;justify-content:center;margin-top:36px;
+  }
+
+  #authStage .card{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:18px;
+    padding:40px 36px;
+    animation:fadeIn .35s ease;
+  }
+  @keyframes fadeIn{
+    from{opacity:0;transform:translateY(8px);}
+    to{opacity:1;transform:translateY(0);}
+  }
+  @media (max-width:520px){ #authStage .card{padding:30px 24px;border-radius:14px;} }
+
+  #authStage .step-eyebrow{
+    font-family:'JetBrains Mono',monospace;
+    font-size:11.5px;letter-spacing:0.1em;text-transform:uppercase;
+    color:var(--teal);margin-bottom:14px;
+    display:flex;align-items:center;gap:8px;
+  }
+  #authStage .step-eyebrow::before{
+    content:'';width:6px;height:6px;border-radius:50%;
+    background:var(--teal);box-shadow:0 0 0 3px var(--teal-dim);
+  }
+  #authStage .card h2{font-size:26px;margin-bottom:10px;}
+  #authStage .card .sub{color:var(--muted);font-size:14.5px;line-height:1.55;margin-bottom:28px;}
+
+  /* choice buttons (welcome, role select) */
+  #authStage .choice-list{display:flex;flex-direction:column;gap:12px;}
+  #authStage .choice-btn{
+    display:flex;align-items:center;gap:16px;
+    background:var(--panel-2);border:1px solid var(--line);
+    border-radius:12px;padding:18px 18px;
+    text-align:left;cursor:pointer;
+    transition:border-color .15s ease, transform .1s ease;
+  }
+  #authStage .choice-btn:hover{border-color:var(--teal);}
+  #authStage .choice-btn:active{transform:scale(0.99);}
+  #authStage .choice-icon{
+    width:42px;height:42px;border-radius:10px;flex-shrink:0;
+    background:var(--ink);border:1px solid var(--line);
+    display:flex;align-items:center;justify-content:center;
+  }
+  #authStage .choice-icon svg{width:19px;height:19px;stroke:var(--teal);}
+  #authStage .choice-text .t{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:15.5px;margin-bottom:3px;}
+  #authStage .choice-text .s{font-size:12.5px;color:var(--muted);line-height:1.4;}
+
+  /* form elements */
+  #authStage .field{margin-bottom:16px;}
+  #authStage .field label{
+    display:block;font-size:12.5px;color:var(--muted);
+    font-family:'JetBrains Mono',monospace;margin-bottom:7px;
+  }
+  #authStage .field input, #authStage .field select{
+    width:100%;background:var(--ink);border:1px solid var(--line);color:var(--text);
+    font-size:15px;border-radius:10px;padding:12px 14px;
+    font-family:'Inter',sans-serif;
+  }
+  #authStage .field input:focus, #authStage .field select:focus{outline:none;border-color:var(--teal);}
+
+  #authStage .terms-row{display:flex;align-items:flex-start;gap:10px;margin:6px 0 22px;}
+  #authStage .terms-row input{margin-top:3px;accent-color:var(--teal);flex-shrink:0;}
+  #authStage .terms-row label{font-size:12.5px;color:var(--muted);line-height:1.5;}
+  #authStage .terms-link{color:var(--teal);text-decoration:underline;cursor:pointer;}
+
+  #authStage .btn-primary{
+    width:100%;background:var(--teal);color:var(--ink);
+    font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:15px;
+    padding:14px;border-radius:10px;border:none;cursor:pointer;
+  }
+  #authStage .btn-primary:hover{opacity:0.92;}
+  #authStage .btn-text{
+    width:100%;background:transparent;border:none;color:var(--muted);
+    font-size:13.5px;padding:12px;cursor:pointer;text-align:center;
+  }
+  #authStage .btn-text:hover{color:var(--text);}
+  #authStage .btn-back{
+    display:inline-flex;align-items:center;gap:6px;
+    background:transparent;border:none;color:var(--muted);
+    font-size:13.5px;cursor:pointer;margin-bottom:18px;padding:0;
+  }
+  #authStage .btn-back:hover{color:var(--text);}
+
+  #authStage .error-msg{
+    color:var(--coral);font-size:12.5px;font-family:'JetBrains Mono',monospace;
+    margin:-6px 0 14px;min-height:14px;
+  }
+  #authStage .kyb-note{
+    font-size:11.5px;color:var(--muted);font-family:'JetBrains Mono',monospace;
+    line-height:1.55;text-align:center;margin-top:16px;
+  }
+
+  #authStage .success-icon{
+    width:52px;height:52px;border-radius:50%;background:var(--teal);
+    display:flex;align-items:center;justify-content:center;margin:0 auto 20px;
+  }
+  #authStage .success-icon svg{width:24px;height:24px;stroke:var(--ink);stroke-width:3;}
+  #authStage .card.center-text{text-align:center;}
+
+  #authStage footer{
+    padding:22px 32px;text-align:center;
+    font-size:12px;color:var(--muted);font-family:'JetBrains Mono',monospace;
+  }
+
+  /* ---------- SUB-PAGE HEADER (Vault / Activity / Join session) ---------- */
+  #authStage .page-header{
+    display:flex;align-items:center;gap:14px;margin-bottom:32px;
+  }
+  #authStage .page-header h2{font-size:26px;}
+  #authStage .btn-icon-back{
+    width:38px;height:38px;border-radius:10px;flex-shrink:0;
+    background:var(--panel);border:1px solid var(--line);color:var(--text);
+    display:flex;align-items:center;justify-content:center;cursor:pointer;
+    font-size:16px;
+  }
+  #authStage .btn-icon-back:hover{border-color:var(--teal);}
+
+  /* ---------- VAULT PAGE ---------- */
+  #authStage .vault-cat{
+    background:var(--panel);border:1px solid var(--line);border-radius:14px;
+    margin-bottom:14px;overflow:hidden;
+  }
+  #authStage .vault-cat-head{
+    display:flex;justify-content:space-between;align-items:center;
+    padding:18px 22px;cursor:pointer;
+  }
+  #authStage .vault-cat-head .cn{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:15.5px;}
+  #authStage .vault-cat-head .cc{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted);}
+  #authStage .vault-cat-body{display:none;border-top:1px solid var(--line);padding:6px 22px 6px;}
+  #authStage .vault-cat-body.open{display:block;}
+  #authStage .vault-field-row{
+    display:flex;justify-content:space-between;align-items:center;gap:14px;
+    padding:14px 0;border-bottom:1px dashed var(--line);
+  }
+  #authStage .vault-field-row:last-child{border-bottom:none;}
+  #authStage .vault-field-row .fn{font-size:14px;color:var(--text);flex-shrink:0;}
+  #authStage .vault-field-row .fv{font-family:'JetBrains Mono',monospace;font-size:13.5px;color:var(--muted);text-align:right;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  #authStage .btn-edit-field{
+    background:transparent;border:1px solid var(--line);color:var(--muted);
+    font-size:11.5px;padding:6px 12px;border-radius:7px;cursor:pointer;flex-shrink:0;
+  }
+  #authStage .btn-edit-field:hover{border-color:var(--teal);color:var(--teal);}
+  #authStage .field-edit-inline{padding:14px 0;}
+  #authStage .field-edit-inline .fn{font-size:13.5px;color:var(--text);margin-bottom:8px;}
+  #authStage .field-edit-row{display:flex;gap:8px;}
+  #authStage .field-edit-row input{
+    flex:1;background:var(--ink);border:1px solid var(--line);color:var(--text);
+    font-family:'JetBrains Mono',monospace;font-size:13.5px;border-radius:8px;padding:9px 12px;
+  }
+  #authStage .field-edit-row input:focus{outline:none;border-color:var(--teal);}
+  #authStage .field-edit-row input.err{border-color:var(--coral);}
+  #authStage .btn-save-field{background:var(--teal);color:var(--ink);font-size:12.5px;font-weight:600;font-family:'Space Grotesk',sans-serif;border:none;border-radius:8px;padding:0 16px;cursor:pointer;}
+  #authStage .btn-cancel-field{background:transparent;border:1px solid var(--line);color:var(--muted);font-size:12.5px;border-radius:8px;padding:0 14px;cursor:pointer;}
+  #authStage .field-error{color:var(--coral);font-size:11.5px;font-family:'JetBrains Mono',monospace;margin-top:6px;min-height:14px;}
+  #authStage .req-star{color:var(--coral);}
+
+  /* ---------- ACTIVITY PAGE ---------- */
+  #authStage .activity-search{
+    width:100%;background:var(--panel);border:1px solid var(--line);color:var(--text);
+    font-size:14px;border-radius:10px;padding:12px 16px;margin-bottom:20px;
+  }
+  #authStage .activity-search:focus{outline:none;border-color:var(--teal);}
+  #authStage .activity-item{
+    background:var(--panel);border:1px solid var(--line);border-radius:12px;
+    padding:16px 20px;margin-bottom:10px;
+    display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;
+  }
+  #authStage .activity-item .abiz{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:14.5px;margin-bottom:4px;}
+  #authStage .activity-item .afields{font-size:12.5px;color:var(--muted);}
+  #authStage .activity-item .atime{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);margin-top:4px;}
+  #authStage .activity-status{font-family:'JetBrains Mono',monospace;font-size:11.5px;padding:5px 12px;border-radius:20px;flex-shrink:0;}
+  #authStage .activity-status.approved{color:var(--teal);background:var(--teal-dim);}
+  #authStage .activity-status.denied{color:var(--coral);background:rgba(251,113,133,0.12);}
+  #authStage .activity-status.reported{color:var(--amber);background:rgba(255,182,72,0.12);}
+  #authStage .activity-empty{color:var(--muted);font-size:13.5px;text-align:center;padding:40px 0;}
+
+  /* ---------- JOIN SESSION PAGE ---------- */
+  #authStage .session-card{
+    background:var(--panel);border:1px solid var(--line);border-radius:16px;
+    padding:34px 32px;max-width:460px;margin:0 auto;text-align:center;
+  }
+  #authStage .demo-hint{
+    background:var(--ink);border:1px dashed var(--line);border-radius:10px;
+    padding:12px 16px;margin-bottom:24px;font-family:'JetBrains Mono',monospace;
+    font-size:12px;color:var(--muted);text-align:left;line-height:1.6;
+  }
+  #authStage .demo-hint b{color:var(--teal);}
+  #authStage .session-code-display{
+    font-family:'JetBrains Mono',monospace;font-size:20px;letter-spacing:0.2em;
+    color:var(--text);margin-bottom:18px;
+  }
+  #authStage .req-brand-badge{
+    width:44px;height:44px;border-radius:12px;margin:0 auto 14px;
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:15px;color:#fff;
+  }
+  #authStage .req-field-list{margin:20px 0;text-align:left;}
+  #authStage .req-field-row{
+    display:flex;justify-content:space-between;background:var(--ink);
+    border-radius:8px;padding:11px 14px;margin-bottom:8px;font-size:13.5px;
+  }
+  #authStage .req-field-row .rfv{font-family:'JetBrains Mono',monospace;color:var(--muted);}
+  #authStage .session-actions{display:flex;gap:10px;margin-top:20px;}
+  #authStage .btn-approve{flex:1;background:var(--teal);color:var(--ink);font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:14px;border:none;border-radius:10px;padding:13px;cursor:pointer;}
+  #authStage .btn-deny{flex:1;background:transparent;border:1px solid var(--line);color:var(--muted);font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:14px;border-radius:10px;padding:13px;cursor:pointer;}
+  #authStage .btn-deny:hover{border-color:var(--coral);color:var(--coral);}
+  #authStage .btn-report{width:100%;margin-top:10px;background:transparent;border:1px solid var(--line);color:var(--muted);font-size:12.5px;border-radius:10px;padding:11px;cursor:pointer;}
+  #authStage .btn-report:hover{border-color:var(--amber);color:var(--amber);}
+  #authStage .session-spinner{
+    width:32px;height:32px;margin:0 auto 18px;border-radius:50%;
+    border:3px solid var(--line);border-top-color:var(--teal);
+    animation:spin .8s linear infinite;
+  }
+  @keyframes spin{to{transform:rotate(360deg);}}
+  #authStage .result-icon{
+    width:48px;height:48px;border-radius:50%;margin:0 auto 16px;
+    display:flex;align-items:center;justify-content:center;
+  }
+  #authStage .result-icon.approved{background:var(--teal);}
+  #authStage .result-icon.denied{background:var(--coral);}
+  #authStage .result-icon.reported{background:var(--amber);}
+  #authStage .result-icon svg{width:22px;height:22px;stroke:var(--ink);stroke-width:3;}
+
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <div class="nav-logo" id="navLogo" style="cursor:pointer;">
+      <svg class="app-icon-mark" viewBox="0 0 64 64" aria-hidden="true">
+        <defs><linearGradient id="navIconBg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#0D9488"/><stop offset="100%" stop-color="#0F1329"/></linearGradient></defs>
+        <rect x="2" y="2" width="60" height="60" rx="14" fill="url(#navIconBg)"/>
+        <path d="M22 26 a10 10 0 0 1 20 0 v8" fill="none" stroke="#F4FBFA" stroke-width="4" stroke-linecap="round"/>
+        <rect x="18" y="34" width="28" height="22" rx="5" fill="#F4FBFA"/>
+        <circle cx="32" cy="42" r="3" fill="#0F1329"/>
+        <rect x="30" y="44" width="4" height="7" rx="1.5" fill="#0F1329"/>
+        <circle cx="46" cy="47" r="9" fill="#34D8C6" stroke="#0F1329" stroke-width="1.5"/>
+      </svg>
+      ProVall
+    </div>
+    <div class="nav-links" id="navLinks">
+      <a href="#how">How it works</a>
+      <a href="#security">Security</a>
+      <a href="#business">For businesses</a>
+    </div>
+    <div style="display:flex;gap:10px;align-items:center;" id="navAuthButtons">
+      <button class="btn-nav-ghost" id="navSignInBtn">Sign in</button>
+      <button class="btn-nav" id="navCreateAcctBtn">Create account</button>
+    </div>
+  </div>
+</nav>
+
+<div id="landingContent">
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="eyebrow">Now in early access</div>
+      <h1>Prove it.<br><span class="accent">Don't say it.</span></h1>
+      <p class="lead">ProVall replaces the moment you read your SSN or card number out loud on a call. Both sides verify who they are, then the business requests exactly the fields it needs — you approve with one tap.</p>
+      <div class="hero-ctas">
+        <button class="btn-primary" onclick="document.getElementById('signup').scrollIntoView({behavior:'smooth'})">Get early access</button>
+        <button class="btn-secondary" onclick="document.getElementById('how').scrollIntoView({behavior:'smooth'})">See how it works</button>
+      </div>
+    </div>
+
+    <div class="handshake-card">
+      <div class="handshake-row">
+        <div class="party" id="partyUser">
+          <div class="avatar">YOU</div>
+          <div class="label">usr_pub_7a2f</div>
+        </div>
+        <div class="handshake-line" id="handshakeLine"><div class="pulse"></div></div>
+        <div class="party" id="partyBiz">
+          <div class="avatar">AB</div>
+          <div class="label">biz_pub_9f1c</div>
+        </div>
+      </div>
+      <div class="handshake-code" id="handshakeCode">Q 7 X 2</div>
+      <div class="handshake-status mono" id="handshakeStatus">waiting for session…</div>
+    </div>
+  </div>
+</section>
+
+<section class="problem">
+  <div class="wrap problem-grid">
+    <div>
+      <div class="eyebrow">The problem</div>
+      <h2>Every call still asks you to say the unsafe thing out loud.</h2>
+      <p>Reading sensitive information to a stranger on the phone is slow, easy to mishear, and leaves it exposed to whoever's listening — human or recording. It's the same broken moment at every bank, clinic, and call center.</p>
+    </div>
+    <div class="quote-card mono">
+      <div class="quote-line">"Can you read me your full Social?"</div>
+      <div class="quote-line">"I'll need your card number, then the CVV…"</div>
+      <div class="quote-line">"Let's start with your date of birth."</div>
+      <div class="quote-line">"Spell that last name for me?"</div>
+    </div>
+  </div>
+</section>
+
+<section class="how" id="how">
+  <div class="wrap">
+    <div class="eyebrow">How it works</div>
+    <h2>Four steps. No information spoken aloud.</h2>
+    <p>The mechanic is the same whether you're talking to a person or an AI agent — pairing, identity, request, approval.</p>
+    <div class="steps">
+      <div class="step">
+        <div class="num">01</div>
+        <h3>Pair the call</h3>
+        <p>The business opens a session and reads you a short code — like a meeting ID, but for this one call.</p>
+      </div>
+      <div class="step">
+        <div class="num">02</div>
+        <h3>Prove identity</h3>
+        <p>You and the business each sign in with your own PIN. Your key never leaves your device — the PIN just authorizes it to sign.</p>
+      </div>
+      <div class="step">
+        <div class="num">03</div>
+        <h3>Request specific fields</h3>
+        <p>The business asks for exactly what it needs — SSN last 4, a policy number — never blanket access to everything.</p>
+      </div>
+      <div class="step">
+        <div class="num">04</div>
+        <h3>Approve, deny, or flag</h3>
+        <p>You see exactly what's being asked and decide in one tap. Nothing moves without your explicit approval.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="security" id="security">
+  <div class="wrap">
+    <div class="eyebrow">Security</div>
+    <h2>Built so a stolen code isn't enough.</h2>
+    <div class="security-grid">
+      <div class="sec-card">
+        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></div>
+        <h3>Field-level requests only</h3>
+        <p>Businesses ask for named fields, never "everything." You see the exact list before approving anything.</p>
+      </div>
+      <div class="sec-card">
+        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 6v6c0 5 3.5 8.5 8 10 4.5-1.5 8-5 8-10V6z"></path></svg></div>
+        <h3>Mutual identity verification</h3>
+        <p>Both sides prove who they are with a registered key before any request is even possible.</p>
+      </div>
+      <div class="sec-card">
+        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><polyline points="12 7 12 12 15 14"></polyline></svg></div>
+        <h3>Cooldowns prevent spam</h3>
+        <p>A business can't flood a caller with requests — limits and lockouts are built into every session.</p>
+      </div>
+      <div class="sec-card">
+        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="6" x2="18" y2="18"></line><line x1="6" y1="18" x2="18" y2="6"></line></svg></div>
+        <h3>Mismatch detection</h3>
+        <p>If a signature doesn't match the registered key, the session is flagged and closed — not just retried.</p>
+      </div>
+      <div class="sec-card">
+        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"></path><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg></div>
+        <h3>Verified businesses only</h3>
+        <p>Every business passes a credential check — EIN, license, authorized rep — before it can request anything.</p>
+      </div>
+      <div class="sec-card">
+        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"></rect><path d="M8 12h8M8 8h8M8 16h5"></path></svg></div>
+        <h3>Full activity history</h3>
+        <p>Every request, approval, denial, and flag is logged and searchable — for both sides.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="business" id="business">
+  <div class="wrap">
+    <div class="business-inner">
+      <div>
+        <div class="eyebrow">For businesses</div>
+        <h2>Faster verification. Less liability. Ready for AI voice agents.</h2>
+        <p>Reduce handle time, cut fraud exposure from agents handling raw data by hand, and give callers a modern, opt-in way to prove who they are.</p>
+        <ul>
+          <li>Rep-level accountability with full history per employee</li>
+          <li>Admin controls to revoke access or set request limits</li>
+          <li>Built for AI voice agents avoiding spoken sensitive data</li>
+          <li>Exportable audit trail for compliance review</li>
+        </ul>
+      </div>
+      <div class="biz-stats">
+        <div class="biz-stat"><div class="n">1 tap</div><div class="l">to approve a request, vs. reading digits aloud</div></div>
+        <div class="biz-stat"><div class="n">0</div><div class="l">sensitive fields spoken or typed by an agent</div></div>
+        <div class="biz-stat"><div class="n">100%</div><div class="l">of requests logged and auditable on both sides</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="signup" id="signup">
+  <div class="wrap">
+    <div class="eyebrow" style="justify-content:center;">Early access</div>
+    <h2>Be first to try ProVall.</h2>
+    <p>We're onboarding early users and pilot businesses. Leave your email and we'll reach out.</p>
+    <form class="signup-form" id="signupForm">
+      <input type="email" id="signupEmail" placeholder="you@example.com" required>
+      <button type="submit" class="btn-primary">Notify me</button>
+    </form>
+    <div class="signup-success mono" id="signupSuccess">You're on the list. We'll be in touch.</div>
+    <div class="signup-note">No spam. Just early access when it opens.</div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="f-logo">
+      <svg class="app-icon-mark" viewBox="0 0 64 64" aria-hidden="true" style="width:20px;height:20px;">
+        <defs><linearGradient id="footerIconBg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#0D9488"/><stop offset="100%" stop-color="#0F1329"/></linearGradient></defs>
+        <rect x="2" y="2" width="60" height="60" rx="14" fill="url(#footerIconBg)"/>
+        <path d="M22 26 a10 10 0 0 1 20 0 v8" fill="none" stroke="#F4FBFA" stroke-width="4" stroke-linecap="round"/>
+        <rect x="18" y="34" width="28" height="22" rx="5" fill="#F4FBFA"/>
+        <circle cx="32" cy="42" r="3" fill="#0F1329"/>
+        <rect x="30" y="44" width="4" height="7" rx="1.5" fill="#0F1329"/>
+        <circle cx="46" cy="47" r="9" fill="#34D8C6" stroke="#0F1329" stroke-width="1.5"/>
+      </svg>
+      ProVall
+    </div>
+    <div class="f-note">© 2026 ProVall. Prototype product — not yet publicly available.</div>
+  </div>
+</footer>
+</div>
+
+<div id="authStage" style="display:none;">
+<main>
+  <div class="stage" id="stage"></div>
+</main>
+</div>
+
+<script>
+  // Hero handshake animation — cycles through the actual ProVall flow
+  const partyUser = document.getElementById('partyUser');
+  const partyBiz = document.getElementById('partyBiz');
+  const line = document.getElementById('handshakeLine');
+  const status = document.getElementById('handshakeStatus');
+  const codeEl = document.getElementById('handshakeCode');
+
+  const codes = ['Q 7 X 2', 'M 4 L 9', 'K 2 R 8'];
+  let codeIndex = 0;
+
+  function resetHandshake(){
+    partyUser.classList.remove('active');
+    partyBiz.classList.remove('active');
+    line.classList.remove('flowing');
+    status.classList.remove('ok');
+    status.textContent = 'waiting for session…';
+    codeEl.textContent = codes[codeIndex % codes.length];
+  }
+
+  function runHandshake(){
+    resetHandshake();
+    setTimeout(() => {
+      line.classList.add('flowing');
+      status.textContent = 'pairing with code…';
+    }, 600);
+    setTimeout(() => {
+      partyBiz.classList.add('active');
+      status.textContent = 'business signed…';
+    }, 1800);
+    setTimeout(() => {
+      partyUser.classList.add('active');
+      status.textContent = 'you signed…';
+    }, 2800);
+    setTimeout(() => {
+      line.classList.remove('flowing');
+      status.classList.add('ok');
+      status.textContent = 'verified — request unlocked';
+    }, 3800);
+    setTimeout(() => {
+      codeIndex++;
+      runHandshake();
+    }, 6200);
+  }
+  runHandshake();
+
+  // Signup form — client-side only for this landing page draft
+  document.getElementById('signupForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const form = document.getElementById('signupForm');
+    const success = document.getElementById('signupSuccess');
+    form.style.display = 'none';
+    success.style.display = 'block';
+  });
+</script>
+
+<script>
+
+const stage = document.getElementById('stage');
+
+// ---------- NAV LOGIN STATE ----------
+function setNavLoggedIn(name){
+  const box = document.getElementById('navAuthButtons');
+  box.innerHTML = `
+    <span class="mono" style="font-size:12.5px;color:var(--muted);">Logged in${name ? ' as ' + name : ''}</span>
+    <button class="btn-nav-ghost" id="navSignOutBtn">Sign out</button>
+  `;
+  document.getElementById('navSignOutBtn').addEventListener('click', doGlobalSignOut);
+}
+function setNavLoggedOut(){
+  const box = document.getElementById('navAuthButtons');
+  box.innerHTML = `
+    <button class="btn-nav-ghost" id="navSignInBtn">Sign in</button>
+    <button class="btn-nav" id="navCreateAcctBtn">Create account</button>
+  `;
+  document.getElementById('navSignInBtn').addEventListener('click', () => { showAuthStage(); renderSignIn(); });
+  document.getElementById('navCreateAcctBtn').addEventListener('click', () => { showAuthStage(); renderRoleSelect(); });
+}
+function doGlobalSignOut(){
+  setNavLoggedOut();
+  backToLanding();
+}
+
+// ---------- BUSINESS CONSOLE state ----------
+let businessSessionLog = [];
+let revokedReps = new Set();
+let repLimits = {};
+let bizActiveRoom = null;
+
+// ---------- DATA: the vault, activity history, and the demo session ----------
+const vaultData = {
+  personal: { label: 'Personal Info', fields: [
+    { label: 'Full name', value: 'Nathan Rosenstrach', required: true },
+    { label: 'Date of birth', value: '04/12/1994', required: true },
+    { label: 'Home address', value: '482 Birchwood Lane, Austin, TX 78701' },
+  ]},
+  identity: { label: 'Identity', fields: [
+    { label: 'Social Security Number', value: '523-14-8890', required: true },
+  ]},
+  financial: { label: 'Financial', fields: [
+    { label: 'Card number', value: '4532 1180 4567 8291' },
+    { label: 'Card expiration', value: '09/28' },
+    { label: 'CVV', value: '314' },
+    { label: 'Bank account number', value: '000451882291' },
+  ]},
+  insurance: { label: 'Insurance', fields: [
+    { label: 'Insurance ID', value: 'BXQ-8823390' },
+    { label: 'Policy number', value: 'HI-204471' },
+  ]},
+  medical: { label: 'Medical', fields: [
+    { label: 'Medical history', value: 'Type 2 diabetes (2019), appendectomy (2011)' },
+    { label: 'Current medications', value: 'Metformin 500mg, Lisinopril 10mg' },
+    { label: 'Allergies', value: 'Penicillin' },
+  ]},
+};
+
+let activityLog = [
+  { business: 'Acme Bank', fields: ['SSN (last 4)', 'Account number'], status: 'approved', time: 'Yesterday, 2:14 PM' },
+  { business: 'Riverside Clinic', fields: ['Medical history', 'Insurance ID'], status: 'approved', time: 'Jul 21, 10:02 AM' },
+  { business: 'Nova Retail', fields: ['Card number', 'CVV'], status: 'denied', time: 'Jul 18, 6:47 PM' },
+];
+
+// A demo session, as if a business had just created a room and read you this code on a call
+const demoSession = {
+  code: 'Q7X2',
+  business: 'Acme Bank',
+  brandInitial: 'AB',
+  brandColor: '#2563EB',
+  context: 'Identity verification · Call #4471',
+  requestFields: [
+    { label: 'SSN (last 4)', value: '••90' },
+    { label: 'Account number', value: '••••8291' },
+    { label: 'Date of birth', value: '••/••/••••' },
+  ],
+};
+
+
+// ---------- SCREEN 1: Welcome — Sign in or Create account ----------
+function renderWelcome(){
+  stage.innerHTML = `
+    <div class="card">
+      <div class="step-eyebrow">Get started</div>
+      <h2>Welcome to ProVall</h2>
+      <div class="sub">Sign in to your existing account, or create a new one to get started.</div>
+      <div class="choice-list">
+        <div class="choice-btn" id="createAccountBtn">
+          <div class="choice-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c0-4 4-6 8-6s8 2 8 6"></path><line x1="19" y1="8" x2="19" y2="14"></line><line x1="16" y1="11" x2="22" y2="11"></line></svg></div>
+          <div class="choice-text">
+            <div class="t">Create account</div>
+            <div class="s">Set up a new individual or business account</div>
+          </div>
+        </div>
+        <div class="choice-btn" id="signInBtn">
+          <div class="choice-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path><polyline points="10 17 15 12 10 7"></polyline><line x1="15" y1="12" x2="3" y2="12"></line></svg></div>
+          <div class="choice-text">
+            <div class="t">Sign in</div>
+            <div class="s">Access your existing account on this device</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+  document.getElementById('createAccountBtn').addEventListener('click', renderRoleSelect);
+  document.getElementById('signInBtn').addEventListener('click', renderSignIn);
+}
+
+// ---------- SCREEN 2: Are you a business or an individual? ----------
+function renderRoleSelect(){
+  stage.innerHTML = `
+    <div class="card">
+      <button class="btn-back" id="backToWelcome">&larr; Back</button>
+      <div class="step-eyebrow">Step 1 of 2</div>
+      <h2>Create your account</h2>
+      <div class="sub">Are you signing up as a business or an individual?</div>
+      <div class="choice-list">
+        <div class="choice-btn" id="roleUserBtn">
+          <div class="choice-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c0-4 4-6 8-6s8 2 8 6"></path></svg></div>
+          <div class="choice-text">
+            <div class="t">I'm an individual</div>
+            <div class="s">Store your info and approve requests during calls</div>
+          </div>
+        </div>
+        <div class="choice-btn" id="roleBizBtn">
+          <div class="choice-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"></path><path d="M5 21V7l7-4 7 4v14"></path><path d="M9 9h1M9 13h1M14 9h1M14 13h1M9 21v-4h6v4"></path></svg></div>
+          <div class="choice-text">
+            <div class="t">I'm a business</div>
+            <div class="s">Request verified info from callers — requires credential verification</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+  document.getElementById('backToWelcome').addEventListener('click', backToLanding);
+  document.getElementById('roleUserBtn').addEventListener('click', renderUserSignup);
+  document.getElementById('roleBizBtn').addEventListener('click', renderBusinessSignup);
+}
+
+// ---------- Individual signup ----------
+function renderUserSignup(){
+  stage.innerHTML = `
+    <div class="card">
+      <button class="btn-back" id="backToRoles">&larr; Back</button>
+      <div class="step-eyebrow">Step 2 of 2</div>
+      <h2>Create your account</h2>
+      <div class="sub">Your login is used to sign in on other devices. Your PIN stays on this device and signs sessions.</div>
+
+      <div class="field">
+        <label for="signupName">Full name</label>
+        <input type="text" id="signupName" placeholder="Your name">
+      </div>
+      <div class="field">
+        <label for="acctSignupEmail">Email or username</label>
+        <input type="text" id="acctSignupEmail" placeholder="you@example.com">
+      </div>
+      <div class="field">
+        <label for="signupPassword">Password</label>
+        <input type="password" id="signupPassword" placeholder="At least 8 characters">
+      </div>
+      <div class="field">
+        <label for="signupPasswordConfirm">Confirm password</label>
+        <input type="password" id="signupPasswordConfirm" placeholder="Re-enter your password">
+      </div>
+      <div class="field">
+        <label for="signupPin">Create a Vault PIN</label>
+        <input type="password" id="signupPin" maxlength="4" placeholder="••••" inputmode="numeric">
+      </div>
+
+      <div class="terms-row">
+        <input type="checkbox" id="agreeTerms">
+        <label for="agreeTerms">I agree to the <span class="terms-link">Terms of Service</span> and <span class="terms-link">Privacy Policy</span></label>
+      </div>
+      <div class="error-msg" id="termsError"></div>
+
+      <button class="btn-primary" id="signupContinueBtn">Create account</button>
+    </div>
+  `;
+  document.getElementById('backToRoles').addEventListener('click', renderRoleSelect);
+  document.getElementById('signupContinueBtn').addEventListener('click', () => {
+    const errorEl = document.getElementById('termsError');
+    const name = document.getElementById('signupName').value.trim();
+    const email = document.getElementById('acctSignupEmail').value.trim();
+    const password = document.getElementById('signupPassword').value;
+    const passwordConfirm = document.getElementById('signupPasswordConfirm').value;
+    const pin = document.getElementById('signupPin').value.trim();
+
+    if (!name){
+      errorEl.textContent = 'Enter your full name.';
+      return;
+    }
+    if (!email){
+      errorEl.textContent = 'Enter an email or username.';
+      return;
+    }
+    if (password.length < 8){
+      errorEl.textContent = 'Password must be at least 8 characters.';
+      return;
+    }
+    if (password !== passwordConfirm){
+      errorEl.textContent = "Passwords don't match.";
+      return;
+    }
+    if (pin.length !== 4 || !/^\d{4}$/.test(pin)){
+      errorEl.textContent = 'Vault PIN must be exactly 4 digits.';
+      return;
+    }
+    if (!document.getElementById('agreeTerms').checked){
+      errorEl.textContent = 'You must agree to the Terms of Service and Privacy Policy to continue.';
+      return;
+    }
+    errorEl.textContent = '';
+    setNavLoggedIn(name);
+    renderUserDashboard(name);
+  });
+}
+
+// ---------- Business signup ----------
+function renderBusinessSignup(){
+  stage.innerHTML = `
+    <div class="card">
+      <button class="btn-back" id="backToRoles">&larr; Back</button>
+      <div class="step-eyebrow">Step 2 of 2</div>
+      <h2>Create your business account</h2>
+      <div class="sub">Business accounts must pass identity verification (KYB) before they can request info.</div>
+
+      <div class="field">
+        <label for="bizName">Legal business name</label>
+        <input type="text" id="bizName" placeholder="e.g. Acme Bank">
+      </div>
+      <div class="field">
+        <label for="bizEin">EIN (Tax ID)</label>
+        <input type="text" id="bizEin" placeholder="XX-XXXXXXX">
+      </div>
+      <div class="field">
+        <label for="bizLicense">Business license / registration #</label>
+        <input type="text" id="bizLicense" placeholder="e.g. BL-2024-0198">
+      </div>
+      <div class="field">
+        <label for="bizRep">Authorized representative</label>
+        <input type="text" id="bizRep" placeholder="Full name">
+      </div>
+      <div class="field">
+        <label for="bizEmail">Business email or username</label>
+        <input type="text" id="bizEmail" placeholder="you@acmebank.com">
+      </div>
+      <div class="field">
+        <label for="bizPassword">Password</label>
+        <input type="password" id="bizPassword" placeholder="At least 8 characters">
+      </div>
+      <div class="field">
+        <label for="bizPasswordConfirm">Confirm password</label>
+        <input type="password" id="bizPasswordConfirm" placeholder="Re-enter your password">
+      </div>
+
+      <div class="error-msg" id="bizFormError"></div>
+      <button class="btn-primary" id="bizSubmitBtn">Submit for verification</button>
+      <div class="kyb-note">Credentials are checked against business registries (KYB) before any account is approved.</div>
+    </div>
+  `;
+  document.getElementById('backToRoles').addEventListener('click', renderRoleSelect);
+  document.getElementById('bizSubmitBtn').addEventListener('click', () => {
+    const name = document.getElementById('bizName').value.trim();
+    const ein = document.getElementById('bizEin').value.trim();
+    const license = document.getElementById('bizLicense').value.trim();
+    const rep = document.getElementById('bizRep').value.trim();
+    const email = document.getElementById('bizEmail').value.trim();
+    const password = document.getElementById('bizPassword').value;
+    const passwordConfirm = document.getElementById('bizPasswordConfirm').value;
+    const errorEl = document.getElementById('bizFormError');
+
+    if (!name || !ein || !license || !rep){
+      errorEl.textContent = 'Please fill in every business detail before submitting.';
+      return;
+    }
+    if (!email){
+      errorEl.textContent = 'Enter a business email or username.';
+      return;
+    }
+    if (password.length < 8){
+      errorEl.textContent = 'Password must be at least 8 characters.';
+      return;
+    }
+    if (password !== passwordConfirm){
+      errorEl.textContent = "Passwords don't match.";
+      return;
+    }
+    errorEl.textContent = '';
+    renderVerifying(name);
+  });
+}
+
+function renderVerifying(name){
+  stage.innerHTML = `
+    <div class="card center-text">
+      <div class="step-eyebrow" style="justify-content:center;">Verifying</div>
+      <h2>Checking credentials</h2>
+      <div class="sub">Verifying ${name || 'your business'}'s EIN and registration against business registries…</div>
+    </div>
+  `;
+  setTimeout(() => renderBusinessVerified(name), 1600);
+}
+
+function renderBusinessVerified(name){
+  stage.innerHTML = `
+    <div class="card center-text">
+      <div class="success-icon"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 12 9 17 20 6"></polyline></svg></div>
+      <h2>Business verified</h2>
+      <div class="sub">${name || 'Your business'} can now create sessions and request info from callers.</div>
+      <button class="btn-primary" id="bizDoneBtn">Continue to dashboard</button>
+    </div>
+  `;
+  document.getElementById('bizDoneBtn').addEventListener('click', () => {
+    setNavLoggedIn(name);
+    renderBusinessConsole(name);
+  });
+}
+
+// ---------- Sign in ----------
+function renderSignIn(){
+  stage.innerHTML = `
+    <div class="card">
+      <button class="btn-back" id="backToWelcome">&larr; Back</button>
+      <div class="step-eyebrow">Sign in</div>
+      <h2>Welcome back</h2>
+      <div class="sub">Access your existing account on this device with your username and password.</div>
+
+      <div class="field">
+        <label for="signInAccountType">Signing in as</label>
+        <select id="signInAccountType">
+          <option value="user">Individual</option>
+          <option value="business">Business</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="signInUser">Username or email</label>
+        <input type="text" id="signInUser" placeholder="you@example.com">
+      </div>
+      <div class="field">
+        <label for="signInPass">Password</label>
+        <input type="password" id="signInPass" placeholder="••••••••">
+      </div>
+
+      <div class="error-msg" id="signInError"></div>
+      <button class="btn-primary" id="signInSubmit">Sign in</button>
+      <button class="btn-text" id="forgotLink">Forgot your password?</button>
+    </div>
+  `;
+  document.getElementById('backToWelcome').addEventListener('click', backToLanding);
+  document.getElementById('forgotLink').addEventListener('click', renderRecovery);
+  document.getElementById('signInSubmit').addEventListener('click', () => {
+    const user = document.getElementById('signInUser').value.trim();
+    const pass = document.getElementById('signInPass').value.trim();
+    const accountType = document.getElementById('signInAccountType').value;
+    const errorEl = document.getElementById('signInError');
+    if (!user || !pass){
+      errorEl.textContent = 'Enter your username and password to continue.';
+      return;
+    }
+    errorEl.textContent = '';
+    setNavLoggedIn(user);
+    if (accountType === 'business'){
+      renderBusinessConsole(user);
+    } else {
+      renderUserDashboard(null);
+    }
+  });
+}
+
+function renderRecovery(){
+  stage.innerHTML = `
+    <div class="card">
+      <button class="btn-back" id="backToSignIn">&larr; Back</button>
+      <div class="step-eyebrow">Recover account</div>
+      <h2>Reset your password</h2>
+      <div class="sub">Enter the email on your account. We'll send a recovery code.</div>
+      <div class="field">
+        <label for="recoveryEmail">Email</label>
+        <input type="text" id="recoveryEmail" placeholder="you@example.com">
+      </div>
+      <button class="btn-primary" id="recoverySendBtn">Send recovery code</button>
+    </div>
+  `;
+  document.getElementById('backToSignIn').addEventListener('click', renderSignIn);
+  document.getElementById('recoverySendBtn').addEventListener('click', backToLanding);
+}
+
+// ---------- Dashboards — where the account actually goes next ----------
+function renderUserDashboard(name){
+  stage.className = 'stage wide';
+  stage.innerHTML = `
+    <div class="dash-hero">
+      <div class="step-eyebrow">You're in</div>
+      <h2>${name ? 'Welcome, ' + name : 'Welcome back'}</h2>
+      <div class="sub">Your ProVall account is ready. Here's what you can do next.</div>
+    </div>
+    <div class="action-grid">
+      <div class="action-card">
+        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.99.36 1.96.68 2.89a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.19-1.25a2 2 0 0 1 2.11-.45c.93.32 1.9.55 2.89.68A2 2 0 0 1 22 16.92z"></path></svg></div>
+        <h3>Join a session</h3>
+        <p>Enter the code a business gives you on a call, verify your identity, and approve exactly what they're asking for.</p>
+        <button class="go-link" id="goJoinSession">Join a session <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></button>
+      </div>
+      <div class="action-card">
+        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2"></rect><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg></div>
+        <h3>My Vault</h3>
+        <p>Manage your stored info — personal, financial, insurance, and medical fields, organized and editable anytime.</p>
+        <button class="go-link" id="goVault">Open my vault <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></button>
+      </div>
+      <div class="action-card">
+        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><polyline points="12 7 12 12 15 14"></polyline></svg></div>
+        <h3>Activity</h3>
+        <p>See a full history of every request — who asked, what for, and what you decided.</p>
+        <button class="go-link" id="goActivity">View activity <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></button>
+      </div>
+    </div>
+    <div class="dash-footer-row">
+      <button class="btn-text" id="signOutBtn" style="width:auto;">Sign out</button>
+    </div>
+  `;
+  document.getElementById('goJoinSession').addEventListener('click', renderJoinSession);
+  document.getElementById('goVault').addEventListener('click', renderVaultPage);
+  document.getElementById('goActivity').addEventListener('click', renderActivityPage);
+  document.getElementById('signOutBtn').addEventListener('click', () => {
+    stage.className = 'stage';
+    doGlobalSignOut();
+  });
+}
+
+// ---------- BUSINESS CONSOLE (real functionality, matches the earlier prototype) ----------
+function renderBusinessConsole(bizName){
+  stage.className = 'stage wide';
+  stage.innerHTML = `
+    <div class="page-header">
+      <button class="btn-icon-back" id="bizConsoleBack">&larr;</button>
+      <h2>${bizName || 'Business'} Console</h2>
+    </div>
+    <div class="session-card" id="bizConsoleCard" style="max-width:520px;">
+      <div class="field" style="text-align:left;">
+        <label for="bizRepIdInput">Signed in as (rep ID)</label>
+        <input type="text" id="bizRepIdInput" placeholder="e.g. rep_1042 or your name">
+      </div>
+      <div class="field" style="text-align:left;">
+        <label for="bizRoleSelect">Role</label>
+        <select id="bizRoleSelect">
+          <option value="rep">Rep</option>
+          <option value="admin">Admin</option>
+        </select>
+      </div>
+      <div class="field" style="text-align:left;">
+        <label for="bizConsolePin">Business PIN (signs the session)</label>
+        <input type="password" id="bizConsolePin" maxlength="4" placeholder="••••" inputmode="numeric">
+      </div>
+      <div class="error-msg" id="bizConsoleError"></div>
+      <button class="btn-primary" id="bizCreateRoomBtn">Create session room</button>
+    </div>
+
+    <div id="bizAdminTools" style="display:none;max-width:520px;margin:20px auto 0;text-align:left;">
+      <div class="session-card" style="text-align:left;">
+        <h3 style="font-size:14.5px;margin-bottom:12px;">Admin tools</h3>
+        <div class="field">
+          <label for="revokeRepInput">Revoke a rep's access</label>
+          <div style="display:flex;gap:8px;">
+            <input type="text" id="revokeRepInput" placeholder="rep ID" style="flex:1;">
+            <button class="btn-save-field" id="revokeRepBtn" style="padding:0 16px;">Revoke</button>
+          </div>
+        </div>
+        <div id="revokedRepsList" class="mono" style="font-size:11.5px;color:var(--muted);margin-bottom:14px;"></div>
+        <div class="field">
+          <label for="limitRepInput">Set a rep's request limit</label>
+          <div style="display:flex;gap:8px;">
+            <input type="text" id="limitRepInput" placeholder="rep ID" style="flex:1;">
+            <input type="number" id="limitValueInput" placeholder="e.g. 5" min="1" style="width:70px;">
+            <button class="btn-save-field" id="setLimitBtn" style="padding:0 16px;">Set</button>
+          </div>
+        </div>
+        <div id="repLimitsList" class="mono" style="font-size:11.5px;color:var(--muted);"></div>
+      </div>
+    </div>
+
+    <div style="margin-top:28px;max-width:520px;">
+      <h3 style="font-size:15px;margin-bottom:12px;">Session log</h3>
+      <div id="bizSessionLogList"></div>
+    </div>
+  `;
+  document.getElementById('bizConsoleBack').addEventListener('click', () => {
+    stage.className = 'stage';
+    doGlobalSignOut();
+  });
+  document.getElementById('bizCreateRoomBtn').addEventListener('click', () => attemptCreateBizRoom(bizName));
+  document.getElementById('bizRoleSelect').addEventListener('change', (e) => {
+    document.getElementById('bizAdminTools').style.display = e.target.value === 'admin' ? 'block' : 'none';
+  });
+  document.getElementById('revokeRepBtn').addEventListener('click', () => {
+    const repId = document.getElementById('revokeRepInput').value.trim();
+    if (!repId) return;
+    revokedReps.add(repId);
+    document.getElementById('revokeRepInput').value = '';
+    renderRepAdminLists();
+  });
+  document.getElementById('setLimitBtn').addEventListener('click', () => {
+    const repId = document.getElementById('limitRepInput').value.trim();
+    const val = parseInt(document.getElementById('limitValueInput').value, 10);
+    if (!repId || !val || val < 1) return;
+    repLimits[repId] = val;
+    document.getElementById('limitRepInput').value = '';
+    document.getElementById('limitValueInput').value = '';
+    renderRepAdminLists();
+  });
+  renderRepAdminLists();
+  renderBizSessionLog();
+}
+
+function renderRepAdminLists(){
+  const revokedEl = document.getElementById('revokedRepsList');
+  const limitsEl = document.getElementById('repLimitsList');
+  if (!revokedEl || !limitsEl) return;
+  revokedEl.textContent = revokedReps.size ? 'Revoked: ' + [...revokedReps].join(', ') : 'No reps revoked.';
+  const limitEntries = Object.entries(repLimits);
+  limitsEl.textContent = limitEntries.length
+    ? 'Custom limits: ' + limitEntries.map(([id, n]) => `${id} (${n})`).join(', ')
+    : 'No custom limits set.';
+}
+
+function renderBizSessionLog(){
+  const list = document.getElementById('bizSessionLogList');
+  if (!list) return;
+  if (businessSessionLog.length === 0){
+    list.innerHTML = `<div class="activity-empty">No sessions yet. Create a room to get started.</div>`;
+    return;
+  }
+  list.innerHTML = businessSessionLog.slice().reverse().map(s => `
+    <div class="activity-item">
+      <div>
+        <div class="abiz">${s.repId} · ${s.code}</div>
+        <div class="afields">${s.fields.join(', ')}</div>
+        <div class="atime">${s.time}</div>
+      </div>
+      <span class="activity-status ${s.status}">${s.status}</span>
+    </div>
+  `).join('');
+}
+
+function attemptCreateBizRoom(bizName){
+  const repId = document.getElementById('bizRepIdInput').value.trim();
+  const pin = document.getElementById('bizConsolePin').value.trim();
+  const errorEl = document.getElementById('bizConsoleError');
+
+  if (!repId){
+    errorEl.textContent = 'Enter your rep ID before creating a session.';
+    return;
+  }
+  if (revokedReps.has(repId)){
+    errorEl.textContent = "This rep's access has been revoked by an admin.";
+    return;
+  }
+  if (pin.length !== 4 || !/^\d{4}$/.test(pin)){
+    errorEl.textContent = 'Enter your 4-digit business PIN.';
+    return;
+  }
+  errorEl.textContent = '';
+
+  const code = genBizRoomCode();
+  bizActiveRoom = { code, repId, bizName };
+
+  const card = document.getElementById('bizConsoleCard');
+  card.innerHTML = `
+    <div class="demo-hint" style="text-align:center;">Room open. Read this code to the caller: <b>${code}</b></div>
+    <div class="session-spinner"></div>
+    <h3>Waiting for caller…</h3>
+    <div class="sub" style="margin-top:8px;">In this demo, a caller joins automatically after a moment.</div>
+  `;
+
+  setTimeout(() => showBizFieldRequest(bizName), 1800);
+}
+
+function genBizRoomCode(){
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  let s = '';
+  for (let i = 0; i < 4; i++) s += chars[Math.floor(Math.random() * chars.length)];
+  return s;
+}
+
+function showBizFieldRequest(bizName){
+  const card = document.getElementById('bizConsoleCard');
+  const fieldOptions = [
+    { key: 'ssn', label: 'SSN (last 4)' },
+    { key: 'acct', label: 'Account number' },
+    { key: 'dob', label: 'Date of birth' },
+    { key: 'card', label: 'Card number' },
+  ];
+  card.innerHTML = `
+    <div class="demo-hint" style="text-align:center;">Caller connected &amp; verified · room ${bizActiveRoom.code}</div>
+    <h3 style="margin-bottom:14px;">Request fields</h3>
+    <div style="text-align:left;display:flex;flex-direction:column;gap:8px;margin-bottom:16px;">
+      ${fieldOptions.map(f => `
+        <label style="display:flex;align-items:center;gap:10px;background:var(--ink);border:1px solid var(--line);border-radius:8px;padding:10px 12px;font-size:13.5px;">
+          <input type="checkbox" class="bizFieldCheck" value="${f.label}" checked style="accent-color:var(--teal);">
+          ${f.label}
+        </label>
+      `).join('')}
+    </div>
+    <button class="btn-primary" id="sendBizRequestBtn">Send request to caller</button>
+  `;
+  document.getElementById('sendBizRequestBtn').addEventListener('click', () => sendBizRequest(bizName));
+}
+
+function sendBizRequest(bizName){
+  const checked = Array.from(document.querySelectorAll('.bizFieldCheck:checked')).map(c => c.value);
+  if (checked.length === 0) return;
+
+  const card = document.getElementById('bizConsoleCard');
+  card.innerHTML = `
+    <div class="session-spinner"></div>
+    <h3>Waiting for caller's response…</h3>
+  `;
+
+  setTimeout(() => {
+    card.innerHTML = `
+      <div class="result-icon approved"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 12 9 17 20 6"></polyline></svg></div>
+      <h3>Approved</h3>
+      <div class="sub" style="margin-top:8px;">${checked.length} field${checked.length > 1 ? 's' : ''} received from the caller.</div>
+      <button class="btn-primary" id="bizRoomDoneBtn" style="margin-top:20px;">Create another session</button>
+    `;
+
+    businessSessionLog.push({
+      repId: bizActiveRoom.repId,
+      code: bizActiveRoom.code,
+      fields: checked,
+      status: 'approved',
+      time: 'Just now'
+    });
+    renderBizSessionLog();
+
+    document.getElementById('bizRoomDoneBtn').addEventListener('click', () => renderBusinessConsole(bizName));
+  }, 1600);
+}
+
+// ---------- VAULT PAGE ----------
+function renderVaultPage(){
+  stage.className = 'stage wide';
+  stage.innerHTML = `
+    <div class="page-header">
+      <button class="btn-icon-back" id="vaultBack">&larr;</button>
+      <h2>My Vault</h2>
+    </div>
+    <div id="vaultCatList"></div>
+  `;
+  document.getElementById('vaultBack').addEventListener('click', () => renderUserDashboard(null));
+  renderVaultCategories();
+}
+
+function renderVaultCategories(){
+  const list = document.getElementById('vaultCatList');
+  list.innerHTML = Object.entries(vaultData).map(([key, cat]) => `
+    <div class="vault-cat">
+      <div class="vault-cat-head" data-cat="${key}">
+        <span class="cn">${cat.label}</span>
+        <span class="cc">${cat.fields.length} fields</span>
+      </div>
+      <div class="vault-cat-body" id="catBody-${key}">
+        ${cat.fields.map((f, i) => vaultFieldRowHtml(key, i, f)).join('')}
+      </div>
+    </div>
+  `).join('');
+
+  list.querySelectorAll('.vault-cat-head').forEach(head => {
+    head.addEventListener('click', () => {
+      document.getElementById('catBody-' + head.dataset.cat).classList.toggle('open');
+    });
+  });
+  list.querySelectorAll('.btn-edit-field').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      enterFieldEdit(btn.dataset.cat, parseInt(btn.dataset.idx, 10));
+    });
+  });
+}
+
+function vaultFieldRowHtml(catKey, idx, f){
+  return `
+    <div class="vault-field-row" id="vrow-${catKey}-${idx}">
+      <span class="fn">${f.label}${f.required ? ' <span class="req-star">*</span>' : ''}</span>
+      <span class="fv">${f.value}</span>
+      <button class="btn-edit-field" data-cat="${catKey}" data-idx="${idx}">Edit</button>
+    </div>
+  `;
+}
+
+function enterFieldEdit(catKey, idx){
+  const field = vaultData[catKey].fields[idx];
+  const row = document.getElementById(`vrow-${catKey}-${idx}`);
+  row.outerHTML = `
+    <div class="field-edit-inline" id="vrow-${catKey}-${idx}">
+      <div class="fn">${field.label}${field.required ? ' <span class="req-star">*</span>' : ''}</div>
+      <div class="field-edit-row">
+        <input type="text" id="editIn-${catKey}-${idx}" value="${field.value}">
+        <button class="btn-save-field" id="saveIn-${catKey}-${idx}">Save</button>
+        <button class="btn-cancel-field" id="cancelIn-${catKey}-${idx}">Cancel</button>
+      </div>
+      <div class="field-error" id="errIn-${catKey}-${idx}"></div>
+    </div>
+  `;
+  document.getElementById(`saveIn-${catKey}-${idx}`).addEventListener('click', () => saveFieldEdit(catKey, idx));
+  document.getElementById(`cancelIn-${catKey}-${idx}`).addEventListener('click', () => revertFieldRow(catKey, idx));
+  document.getElementById(`editIn-${catKey}-${idx}`).focus();
+}
+
+function saveFieldEdit(catKey, idx){
+  const field = vaultData[catKey].fields[idx];
+  const input = document.getElementById(`editIn-${catKey}-${idx}`);
+  const errEl = document.getElementById(`errIn-${catKey}-${idx}`);
+  const val = input.value.trim();
+  if (field.required && !val){
+    errEl.textContent = "This field is required and can't be left blank.";
+    input.classList.add('err');
+    return;
+  }
+  field.value = val;
+  revertFieldRow(catKey, idx);
+}
+
+function revertFieldRow(catKey, idx){
+  const field = vaultData[catKey].fields[idx];
+  const row = document.getElementById(`vrow-${catKey}-${idx}`);
+  row.outerHTML = vaultFieldRowHtml(catKey, idx, field);
+  document.getElementById(`vrow-${catKey}-${idx}`).querySelector('.btn-edit-field')
+    .addEventListener('click', (e) => { e.stopPropagation(); enterFieldEdit(catKey, idx); });
+}
+
+// ---------- ACTIVITY PAGE ----------
+function renderActivityPage(){
+  stage.className = 'stage wide';
+  stage.innerHTML = `
+    <div class="page-header">
+      <button class="btn-icon-back" id="activityBack">&larr;</button>
+      <h2>Activity</h2>
+    </div>
+    <input type="text" class="activity-search" id="activitySearch" placeholder="Search by business…">
+    <div id="activityList"></div>
+  `;
+  document.getElementById('activityBack').addEventListener('click', () => renderUserDashboard(null));
+  const search = document.getElementById('activitySearch');
+  search.addEventListener('input', () => renderActivityList(search.value));
+  renderActivityList('');
+}
+
+function renderActivityList(query){
+  const list = document.getElementById('activityList');
+  const q = query.trim().toLowerCase();
+  const filtered = q ? activityLog.filter(a => a.business.toLowerCase().includes(q)) : activityLog;
+
+  if (filtered.length === 0){
+    list.innerHTML = `<div class="activity-empty">${activityLog.length === 0 ? 'No activity yet. Join a session to see requests appear here.' : 'No matching business found.'}</div>`;
+    return;
+  }
+
+  list.innerHTML = filtered.slice().reverse().map(a => `
+    <div class="activity-item">
+      <div>
+        <div class="abiz">${a.business}</div>
+        <div class="afields">${a.fields.join(', ')}</div>
+        <div class="atime">${a.time}</div>
+      </div>
+      <span class="activity-status ${a.status}">${a.status}</span>
+    </div>
+  `).join('');
+}
+
+// ---------- JOIN A SESSION PAGE ----------
+function renderJoinSession(){
+  stage.className = 'stage wide';
+  stage.innerHTML = `
+    <div class="page-header">
+      <button class="btn-icon-back" id="joinBack">&larr;</button>
+      <h2>Join a session</h2>
+    </div>
+    <div class="session-card" id="sessionCard">
+      <div class="demo-hint">In a real call, a business rep reads you this code. For this demo: code is <b>${demoSession.code}</b>. Enter it below along with your Vault PIN. (Try PIN <b>9999</b> to see a signature mismatch.)</div>
+      <div class="field" style="text-align:left;">
+        <label for="joinCodeInput">Session code</label>
+        <input type="text" id="joinCodeInput" maxlength="4" placeholder="••••" style="text-align:center;letter-spacing:0.25em;font-family:'JetBrains Mono',monospace;">
+      </div>
+      <div class="field" style="text-align:left;">
+        <label for="joinPinInput">Your Vault PIN</label>
+        <input type="password" id="joinPinInput" maxlength="4" placeholder="••••" inputmode="numeric" style="text-align:center;letter-spacing:0.25em;font-family:'JetBrains Mono',monospace;">
+      </div>
+      <div class="error-msg" id="joinSessionError"></div>
+      <button class="btn-primary" id="joinSessionBtn">Join &amp; verify</button>
+    </div>
+  `;
+  document.getElementById('joinBack').addEventListener('click', () => renderUserDashboard(null));
+  document.getElementById('joinSessionBtn').addEventListener('click', attemptJoinSession);
+}
+
+function attemptJoinSession(){
+  const code = document.getElementById('joinCodeInput').value.trim().toUpperCase();
+  const pin = document.getElementById('joinPinInput').value.trim();
+  const errorEl = document.getElementById('joinSessionError');
+
+  if (code !== demoSession.code){
+    errorEl.textContent = "That code doesn't match an open session.";
+    return;
+  }
+  if (pin.length !== 4 || !/^\d{4}$/.test(pin)){
+    errorEl.textContent = 'Enter your 4-digit Vault PIN.';
+    return;
+  }
+  errorEl.textContent = '';
+
+  const card = document.getElementById('sessionCard');
+  card.innerHTML = `
+    <div class="session-spinner"></div>
+    <h3>Verifying identity…</h3>
+    <div class="sub" style="margin-top:8px;">Signing session with ${demoSession.business}</div>
+  `;
+
+  setTimeout(() => {
+    if (pin === '9999'){
+      showMismatch();
+    } else {
+      showIncomingRequest();
+    }
+  }, 1400);
+}
+
+function showMismatch(){
+  const card = document.getElementById('sessionCard');
+  card.innerHTML = `
+    <div class="result-icon denied"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="6" x2="18" y2="18"></line><line x1="6" y1="18" x2="18" y2="6"></line></svg></div>
+    <h3 style="color:var(--coral);">Identity mismatch</h3>
+    <div class="sub" style="margin-top:8px;">Your signature didn't match the registered key on file. This session has been closed and flagged.</div>
+    <button class="btn-primary" id="mismatchDoneBtn" style="margin-top:20px;">Back to dashboard</button>
+  `;
+  document.getElementById('mismatchDoneBtn').addEventListener('click', () => renderUserDashboard(null));
+}
+
+function showIncomingRequest(){
+  const card = document.getElementById('sessionCard');
+  card.innerHTML = `
+    <div class="req-brand-badge" style="background:${demoSession.brandColor};">${demoSession.brandInitial}</div>
+    <h3>${demoSession.business}</h3>
+    <div class="sub" style="margin-top:4px;">${demoSession.context}</div>
+    <div class="req-field-list">
+      ${demoSession.requestFields.map(f => `<div class="req-field-row"><span>${f.label}</span><span class="rfv">${f.value}</span></div>`).join('')}
+    </div>
+    <div class="session-actions">
+      <button class="btn-approve" id="approveReqBtn">Approve</button>
+      <button class="btn-deny" id="denyReqBtn">Deny</button>
+    </div>
+    <button class="btn-report" id="reportReqBtn">This doesn't look right — flag for review</button>
+  `;
+  document.getElementById('approveReqBtn').addEventListener('click', () => resolveSessionRequest('approved'));
+  document.getElementById('denyReqBtn').addEventListener('click', () => resolveSessionRequest('denied'));
+  document.getElementById('reportReqBtn').addEventListener('click', () => resolveSessionRequest('reported'));
+}
+
+function resolveSessionRequest(status){
+  const messages = {
+    approved: `${demoSession.requestFields.length} fields sent to ${demoSession.business}. Nothing else was shared.`,
+    denied: `Request from ${demoSession.business} denied. No data was sent.`,
+    reported: `Flagged for review. No data was sent, and our security team has been notified.`
+  };
+  const card = document.getElementById('sessionCard');
+  card.innerHTML = `
+    <div class="result-icon ${status}"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 12 9 17 20 6"></polyline></svg></div>
+    <h3>${status === 'approved' ? 'Approved' : status === 'denied' ? 'Denied' : 'Flagged for review'}</h3>
+    <div class="sub" style="margin-top:8px;">${messages[status]}</div>
+    <button class="btn-primary" id="sessionDoneBtn" style="margin-top:20px;">Back to dashboard</button>
+  `;
+
+  activityLog.push({
+    business: demoSession.business,
+    fields: demoSession.requestFields.map(f => f.label),
+    status,
+    time: 'Just now'
+  });
+
+  document.getElementById('sessionDoneBtn').addEventListener('click', () => renderUserDashboard(null));
+}
+
+
+
+// ---------- Landing <-> App view switching ----------
+function showAuthStage(){
+  document.getElementById('landingContent').style.display = 'none';
+  document.getElementById('authStage').style.display = 'flex';
+  window.scrollTo(0,0);
+}
+function backToLanding(){
+  document.getElementById('authStage').style.display = 'none';
+  document.getElementById('landingContent').style.display = 'block';
+  window.scrollTo(0,0);
+}
+document.getElementById('navSignInBtn').addEventListener('click', () => {
+  showAuthStage();
+  renderSignIn();
+});
+document.getElementById('navCreateAcctBtn').addEventListener('click', () => {
+  showAuthStage();
+  renderRoleSelect();
+});
+document.getElementById('navLogo').addEventListener('click', backToLanding);
+
+</script>
+</body>
+</html>
