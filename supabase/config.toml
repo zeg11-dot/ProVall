@@ -26,11 +26,8 @@ enable_signup = true
 enabled = true
 policy = "oneshot"
 
-[functions.stripe-connect-onboard]
+[functions.stripe-connect-status]
 verify_jwt = true
 
-[functions.create-transaction-checkout]
+[functions.stripe-connect-onboarding]
 verify_jwt = true
-
-[functions.stripe-webhook]
-verify_jwt = false

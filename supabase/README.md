@@ -1,104 +1,77 @@
-# ProVall payments backend (Stripe Connect on Supabase)
+# ProVall payments backend (real app: pairing-code sessions + VGS + Stripe Connect)
 
-This is a marketplace payments setup, not a single-merchant checkout:
-
-- Each **business** on ProVall onboards its own Stripe **Express connected
-  account**. They are the merchant of record for their own customers.
-- A **transaction** is created between a business and a customer for an
-  agreed dollar amount. It only becomes chargeable once **both**
-  `business_agreed` and `customer_agreed` are true (enforced in the
-  database, not just the app).
-- Once ready, the customer is sent to a Stripe Checkout session created
-  directly on the business's connected account, so the money settles to
-  the business's own Stripe balance — ProVall never holds the funds.
+`index.html` is the real ProVall app. A business opens a "room" with a
+4-character pairing code, reads it to a caller, the caller joins (as a
+guest or a signed-in individual), the business requests specific fields
+(including, optionally, a card + a dollar amount), and the caller approves
+with one tap. Card data is tokenized client-side by **VGS Collect.js**
+before it ever leaves the browser — this backend never sees a raw card
+number.
 
 ## What's here
 
-- `migrations/` — `businesses` and `transactions` tables, RLS policies, and
-  triggers that enforce the two-sided agreement.
-- `functions/stripe-connect-onboard` — creates/resumes a business's Stripe
-  Express account and returns a hosted onboarding link.
-- `functions/create-transaction-checkout` — once a transaction is
-  `ready_to_charge`, creates the Stripe Checkout session for the customer.
-- `functions/stripe-webhook` — single webhook endpoint: marks a
-  transaction `paid`/`failed` and updates a business's onboarding status.
+- `migrations/20260831000000_real_session_schema.sql` — `sessions`,
+  `business_reps`, `admin_actions`, `rep_request_log` tables, RLS, and the
+  `check_and_log_rep_request` rate-limit RPC. This **replaces** the
+  `businesses`/`transactions` schema from an earlier, mismatched attempt at
+  this feature — that schema didn't match what `index.html` actually calls
+  and has been dropped.
+- `functions/stripe-connect-status` — tells the business console whether
+  Stripe is connected yet (queries Stripe live).
+- `functions/stripe-connect-onboarding` — creates/resumes a business's
+  Stripe Express account and returns a hosted onboarding link. The account
+  id is stored on the business's own user account (`app_metadata`) — there
+  is no separate `businesses` table; a business is just a user account.
+- `functions/delete-account` — **already existed before this work**, not
+  touched here.
+
+## Not yet built: `charge-session`
+
+`index.html` calls `sbClient.functions.invoke('charge-session', { body: { session_id } })`
+once a payment session is approved. Building this requires your actual
+**VGS vault configuration** (vault id `tntcc06gjt7`, `sandbox` environment):
+
+- A VGS **Outbound Route** proxying to `api.stripe.com`, so a request
+  containing the VGS aliases for the card fields gets transparently
+  substituted with the real card data before Stripe ever sees it — the
+  edge function itself never touches a raw PAN.
+- VGS API credentials to authenticate that outbound proxy call (from the
+  VGS dashboard → your vault → API keys), stored as Supabase secrets.
+
+Until `charge-session` is deployed, the app already degrades gracefully —
+the business console shows *"Card info received, but automatic charging
+isn't set up yet."*
 
 ## One-time setup
 
-1. **Link this repo to the Supabase project** (project ref
-   `kdsjgzroyrcycckgkumb`, already visible in your Supabase dashboard):
-
-   ```bash
-   supabase login
-   supabase link --project-ref kdsjgzroyrcycckgkumb
-   ```
-
-2. **Apply the database migration:**
+1. **Apply the migration** (adds `sessions`/`business_reps`/`admin_actions`,
+   drops the old mismatched tables):
 
    ```bash
    supabase db push
    ```
 
-3. **Set secrets** (use your real Stripe **platform account** keys — this
-   is the account that owns the connected businesses, found in the Stripe
-   Dashboard under Developers → API keys). Use a restricted/test key while
-   developing, then swap to live keys for production:
+2. **Deploy the two functions:**
 
    ```bash
-   supabase secrets set STRIPE_SECRET_KEY=sk_live_your_actual_key_here
-   supabase secrets set STRIPE_WEBHOOK_SECRET=whsec_your_webhook_signing_secret
+   supabase functions deploy stripe-connect-status
+   supabase functions deploy stripe-connect-onboarding
    ```
 
-   `STRIPE_WEBHOOK_SECRET` comes from step 5 below — you'll circle back
-   here after creating the webhook endpoint.
+3. **`STRIPE_SECRET_KEY`** is already set from earlier — no change needed
+   unless you rotate it.
 
-4. **Deploy the functions:**
+4. **Enable anonymous sign-ins** (needed for guests who join a session
+   without an account): Supabase Dashboard → Authentication → Sign In /
+   Providers → turn on **Anonymous Sign-Ins**. This is a project setting,
+   not something `config.toml` controls for a hosted project.
 
-   ```bash
-   supabase functions deploy stripe-connect-onboard
-   supabase functions deploy create-transaction-checkout
-   supabase functions deploy stripe-webhook --no-verify-jwt
-   ```
+5. **Old Stripe webhook destination**: the one created earlier (pointed at
+   a now-deleted `stripe-webhook` function) can be removed from the Stripe
+   Dashboard → Developers → Webhooks — this app doesn't need a webhook
+   for the flows built so far.
 
-5. **Create the Stripe webhook endpoint** (Stripe Dashboard → Developers →
-   Webhooks → Add endpoint):
+## Next step
 
-   - URL: `https://kdsjgzroyrcycckgkumb.supabase.co/functions/v1/stripe-webhook`
-   - Listen to: **events on Connected accounts** (this platform never
-     charges its own account directly)
-   - Events: `checkout.session.completed`, `checkout.session.expired`,
-     `account.updated`
-   - Copy the generated **Signing secret** and run the
-     `STRIPE_WEBHOOK_SECRET` command from step 3.
-
-## Application flow
-
-1. A business owner signs up (Supabase Auth) and calls
-   `stripe-connect-onboard` with `{ business_name, return_url, refresh_url }`
-   (or `{ business_id, return_url, refresh_url }` to resume onboarding).
-   Redirect them to the returned `url` to complete Stripe's hosted
-   onboarding. `businesses.stripe_onboarding_complete` flips to `true`
-   automatically once Stripe confirms the account can accept charges
-   (via the `account.updated` webhook).
-2. The business creates a `transactions` row for the agreed amount
-   (`amount_cents`, `currency`, `description`, `customer_id`) and sets
-   `business_agreed = true`.
-3. The customer reviews it and sets `customer_agreed = true`. The
-   database trigger flips `status` to `ready_to_charge` the instant both
-   flags are true — neither side can set the other's flag (enforced by a
-   trigger, not just app logic).
-4. The customer calls `create-transaction-checkout` with
-   `{ transaction_id, success_url, cancel_url }` and is redirected to the
-   returned Stripe Checkout `url` to pay with their card.
-5. Stripe charges the card **on the business's connected account** and
-   sends `checkout.session.completed` to `stripe-webhook`, which marks the
-   transaction `paid`.
-
-## Known limitations / next steps
-
-- No email/notification flow yet (e.g. notifying the business when a
-  customer agrees, or the customer when payment succeeds).
-- No refund/dispute handling beyond what's needed to mark a transaction
-  paid.
-- `create-transaction-checkout` assumes the customer already has a
-  Supabase account; there's no guest-checkout path.
+Send over your VGS outbound-route/API details (or confirm the route to
+Stripe isn't set up yet) so `charge-session` can be built to match.
