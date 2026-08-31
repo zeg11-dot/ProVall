@@ -132,6 +132,8 @@ create table if not exists public.rep_request_log (
 create index if not exists rep_request_log_rep_id_idx on public.rep_request_log (rep_id, created_at);
 alter table public.rep_request_log enable row level security;
 
+drop function if exists public.check_and_log_rep_request(text, integer, integer);
+
 create or replace function public.check_and_log_rep_request(
   p_rep_id text,
   p_limit integer,
