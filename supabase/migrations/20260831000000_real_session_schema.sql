@@ -129,7 +129,7 @@ create table if not exists public.rep_request_log (
   requested_at timestamptz not null default now()
 );
 
-create index if not exists rep_request_log_rep_id_idx on public.rep_request_log (rep_id, requested_at);
+create index if not exists rep_request_log_rep_id_idx on public.rep_request_log (rep_id, created_at);
 alter table public.rep_request_log enable row level security;
 
 create or replace function public.check_and_log_rep_request(
@@ -147,7 +147,7 @@ begin
   select count(*) into recent_count
   from public.rep_request_log
   where rep_id = p_rep_id
-    and requested_at > now() - (p_cooldown_seconds || ' seconds')::interval;
+    and created_at > now() - (p_cooldown_seconds || ' seconds')::interval;
 
   if recent_count >= p_limit then
     return jsonb_build_object('allowed', false, 'count', recent_count);
