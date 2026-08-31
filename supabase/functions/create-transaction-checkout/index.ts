@@ -69,10 +69,12 @@ Deno.serve(async (req) => {
       );
     }
 
-    if (transaction.status !== "ready_to_charge") {
+    // "failed" covers an abandoned/expired checkout — safe to retry since
+    // both parties already agreed before it ever reached that state.
+    if (transaction.status !== "ready_to_charge" && transaction.status !== "failed") {
       return new Response(
         JSON.stringify({
-          error: `Transaction is not ready to charge (status: ${transaction.status}). Both parties must agree first.`,
+          error: `Transaction is not payable (status: ${transaction.status}). Both parties must agree first.`,
         }),
         { status: 409, headers: { ...corsHeaders, "Content-Type": "application/json" } },
       );

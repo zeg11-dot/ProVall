@@ -1782,12 +1782,10 @@ function backToLanding(){
   window.scrollTo(0,0);
 }
 document.getElementById('navSignInBtn').addEventListener('click', () => {
-  showAuthStage();
-  renderSignIn();
+  window.location.href = 'login.html';
 });
 document.getElementById('navCreateAcctBtn').addEventListener('click', () => {
-  showAuthStage();
-  renderRoleSelect();
+  window.location.href = 'login.html?mode=signup';
 });
 document.getElementById('navLogo').addEventListener('click', backToLanding);
 
