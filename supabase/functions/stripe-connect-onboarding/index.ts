@@ -11,6 +11,7 @@ import { corsHeaders } from "../_shared/cors.ts";
 
 const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY")!, {
   apiVersion: "2024-06-20",
+  httpClient: Stripe.createFetchHttpClient(),
 });
 
 const supabaseAdmin = createClient(
