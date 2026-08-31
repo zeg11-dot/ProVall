@@ -5,7 +5,7 @@
 // session_type:'payment'. Takes only a session_id — everything else is
 // re-verified server-side against the database directly.
 
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { createClient } from "npm:@supabase/supabase-js@2";
 import { corsHeaders } from "../_shared/cors.ts";
 
 const supabaseAdmin = createClient(

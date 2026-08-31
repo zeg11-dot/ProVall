@@ -5,13 +5,12 @@
 // doesn't exist yet) and returns a hosted onboarding link for Stripe's own
 // KYC/bank-details flow — Provall never sees or stores their bank info.
 
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-import Stripe from "https://esm.sh/stripe@14?target=deno";
+import { createClient } from "npm:@supabase/supabase-js@2";
+import Stripe from "npm:stripe@17";
 import { corsHeaders } from "../_shared/cors.ts";
 
 const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY")!, {
   apiVersion: "2024-06-20",
-  httpClient: Stripe.createFetchHttpClient(),
 });
 
 const supabaseAdmin = createClient(
