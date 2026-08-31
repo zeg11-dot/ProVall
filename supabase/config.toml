@@ -34,3 +34,6 @@ verify_jwt = true
 
 [functions.charge-session]
 verify_jwt = true
+
+[functions.network-test]
+verify_jwt = false
