@@ -1,62 +1,75 @@
-// Called by the business console to show whether Stripe is connected yet.
-// The business's Stripe Connect account id is stored in their own
-// auth.users.app_metadata (set by stripe-connect-onboarding) — there's no
-// separate "businesses" table in this app, a business IS a user account.
-import Stripe from "npm:stripe@17";
-import { createClient } from "npm:@supabase/supabase-js@2";
+// supabase/functions/stripe-connect-status/index.ts
+//
+// Called when the business console loads, and right after a rep returns
+// from Stripe's hosted onboarding. Pulls the live status directly from
+// Stripe and syncs it into business_payment_connections.
+
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import Stripe from "https://esm.sh/stripe@14?target=deno";
 import { corsHeaders } from "../_shared/cors.ts";
 
 const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY")!, {
   apiVersion: "2024-06-20",
+  httpClient: Stripe.createFetchHttpClient(),
 });
+
+const supabaseAdmin = createClient(
+  Deno.env.get("SUPABASE_URL")!,
+  Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
+);
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
-
   try {
     const authHeader = req.headers.get("Authorization");
-    if (!authHeader) {
-      return new Response(JSON.stringify({ error: "Missing Authorization header" }), {
-        status: 401,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
-    }
+    if (!authHeader) return new Response("Unauthorized", { status: 401, headers: corsHeaders });
 
-    const userClient = createClient(
-      Deno.env.get("SUPABASE_URL")!,
-      Deno.env.get("SUPABASE_ANON_KEY")!,
-      { global: { headers: { Authorization: authHeader } } },
+    const { data: { user }, error: authErr } = await supabaseAdmin.auth.getUser(
+      authHeader.replace("Bearer ", "")
     );
+    if (authErr || !user) return new Response("Unauthorized", { status: 401, headers: corsHeaders });
 
-    const { data: userData, error: userError } = await userClient.auth.getUser();
-    if (userError || !userData?.user) {
-      return new Response(JSON.stringify({ error: "Not authenticated" }), {
-        status: 401,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
-    }
+    const { data: connection } = await supabaseAdmin
+      .from("business_payment_connections")
+      .select("stripe_account_id")
+      .eq("business_id", user.id)
+      .eq("provider", "stripe")
+      .maybeSingle();
 
-    const accountId = userData.user.app_metadata?.stripe_account_id as string | undefined;
-    if (!accountId) {
+    if (!connection) {
       return new Response(JSON.stringify({ connected: false }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
-    const account = await stripe.accounts.retrieve(accountId);
-    return new Response(
-      JSON.stringify({
-        connected: true,
-        status: account.details_submitted ? "complete" : "pending",
-        chargesEnabled: !!account.charges_enabled,
-      }),
-      { headers: { ...corsHeaders, "Content-Type": "application/json" } },
-    );
+    const account = await stripe.accounts.retrieve(connection.stripe_account_id);
+    const status = account.charges_enabled ? "complete"
+      : account.requirements?.disabled_reason ? "restricted"
+      : "pending";
+
+    await supabaseAdmin
+      .from("business_payment_connections")
+      .update({
+        onboarding_status: status,
+        charges_enabled: account.charges_enabled,
+        payouts_enabled: account.payouts_enabled,
+        updated_at: new Date().toISOString(),
+      })
+      .eq("business_id", user.id)
+      .eq("provider", "stripe");
+
+    return new Response(JSON.stringify({
+      connected: true,
+      status,
+      chargesEnabled: account.charges_enabled,
+    }), {
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
   } catch (err) {
-    console.error(err);
-    return new Response(JSON.stringify({ error: (err as Error).message }), {
+    console.error("[stripe-connect-status]", err);
+    return new Response(JSON.stringify({ error: err.message }), {
       status: 500,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });

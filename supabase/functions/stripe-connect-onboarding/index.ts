@@ -1,70 +1,66 @@
-// Creates (or resumes) a Stripe Express connected account for the calling
-// business and returns a hosted onboarding link. The account id is saved on
-// the business's own auth.users.app_metadata — this app has no separate
-// businesses table, a business IS a user account.
-import Stripe from "npm:stripe@17";
-import { createClient } from "npm:@supabase/supabase-js@2";
+// supabase/functions/stripe-connect-onboarding/index.ts
+//
+// Called from the business console when a rep clicks "Connect Stripe."
+// Creates a Stripe Express connected account for the business (if one
+// doesn't exist yet) and returns a hosted onboarding link for Stripe's own
+// KYC/bank-details flow — Provall never sees or stores their bank info.
+
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import Stripe from "https://esm.sh/stripe@14?target=deno";
 import { corsHeaders } from "../_shared/cors.ts";
 
 const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY")!, {
   apiVersion: "2024-06-20",
+  httpClient: Stripe.createFetchHttpClient(),
 });
+
+const supabaseAdmin = createClient(
+  Deno.env.get("SUPABASE_URL")!,
+  Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
+);
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
-
   try {
     const authHeader = req.headers.get("Authorization");
-    if (!authHeader) {
-      return new Response(JSON.stringify({ error: "Missing Authorization header" }), {
-        status: 401,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
-    }
+    if (!authHeader) return new Response("Unauthorized", { status: 401, headers: corsHeaders });
 
-    const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
-    const userClient = createClient(supabaseUrl, Deno.env.get("SUPABASE_ANON_KEY")!, {
-      global: { headers: { Authorization: authHeader } },
-    });
+    const { data: { user }, error: authErr } = await supabaseAdmin.auth.getUser(
+      authHeader.replace("Bearer ", "")
+    );
+    if (authErr || !user) return new Response("Unauthorized", { status: 401, headers: corsHeaders });
 
-    const { data: userData, error: userError } = await userClient.auth.getUser();
-    if (userError || !userData?.user) {
-      return new Response(JSON.stringify({ error: "Not authenticated" }), {
-        status: 401,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
-    }
-    const user = userData.user;
+    const { returnUrl } = await req.json();
 
-    const { returnUrl } = await req.json().catch(() => ({ returnUrl: undefined }));
-    if (!returnUrl) {
-      return new Response(JSON.stringify({ error: "returnUrl is required" }), {
-        status: 400,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
-    }
+    const { data: existing } = await supabaseAdmin
+      .from("business_payment_connections")
+      .select("stripe_account_id")
+      .eq("business_id", user.id)
+      .eq("provider", "stripe")
+      .maybeSingle();
 
-    const adminClient = createClient(supabaseUrl, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
+    let accountId = existing?.stripe_account_id;
 
-    let accountId = user.app_metadata?.stripe_account_id as string | undefined;
     if (!accountId) {
       const account = await stripe.accounts.create({
         type: "express",
-        email: user.email ?? undefined,
+        email: user.email,
+        capabilities: {
+          card_payments: { requested: true },
+          transfers: { requested: true },
+        },
+        business_type: "company",
       });
       accountId = account.id;
 
-      const { error: updateError } = await adminClient.auth.admin.updateUserById(user.id, {
-        app_metadata: { ...user.app_metadata, stripe_account_id: accountId },
+      await supabaseAdmin.from("business_payment_connections").insert({
+        business_id: user.id,
+        provider: "stripe",
+        stripe_account_id: accountId,
+        onboarding_status: "pending",
       });
-      if (updateError) {
-        return new Response(JSON.stringify({ error: updateError.message }), {
-          status: 500,
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
-        });
-      }
     }
 
     const accountLink = await stripe.accountLinks.create({
@@ -78,8 +74,8 @@ Deno.serve(async (req) => {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   } catch (err) {
-    console.error(err);
-    return new Response(JSON.stringify({ error: (err as Error).message }), {
+    console.error("[stripe-connect-onboarding]", err);
+    return new Response(JSON.stringify({ error: err.message }), {
       status: 500,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
