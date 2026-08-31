@@ -20,8 +20,10 @@ language plpgsql
 security definer set search_path = public
 as $$
 begin
-  insert into public.profiles (id, email) values (new.id, new.email)
-  on conflict (id) do nothing;
+  if new.email is not null then
+    insert into public.profiles (id, email) values (new.id, new.email)
+    on conflict (id) do nothing;
+  end if;
   return new;
 end;
 $$;
@@ -32,8 +34,10 @@ create trigger on_auth_user_created
   for each row execute function public.handle_new_user();
 
 -- Backfill profiles for anyone who already signed up before this migration.
+-- Skips any account with no email (e.g. phone-only auth) since profiles.email is required.
 insert into public.profiles (id, email)
 select id, email from auth.users
+where email is not null
 on conflict (id) do nothing;
 
 -- A customer needs to see the business's name on their own transaction
