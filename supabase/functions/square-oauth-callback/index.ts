@@ -94,7 +94,7 @@ Deno.serve(async (req) => {
     const locData = await locResp.json();
     const primaryLocationId = locData?.locations?.[0]?.id || null;
 
-    await supabaseAdmin.from("business_payment_connections").upsert({
+    const { error: upsertErr } = await supabaseAdmin.from("business_payment_connections").upsert({
       business_id: pending.business_id,
       provider: "square",
       onboarding_status: primaryLocationId ? "complete" : "restricted",
@@ -106,6 +106,11 @@ Deno.serve(async (req) => {
       square_token_expires_at: tokenData.expires_at,
       updated_at: new Date().toISOString(),
     }, { onConflict: "business_id,provider" });
+
+    if (upsertErr) {
+      console.error("[square-oauth-callback] could not save business_payment_connections row", upsertErr);
+      return redirectTo(pending.return_url || FALLBACK_RETURN_URL, { square_error: "save_failed" });
+    }
 
     return redirectTo(pending.return_url || FALLBACK_RETURN_URL, { square_connected: "true" });
   } catch (err) {
