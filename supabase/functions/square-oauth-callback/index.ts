@@ -24,12 +24,12 @@ const SQUARE_VERSION = "2025-01-23";
 function htmlResponse(message: string, ok: boolean, returnUrl?: string) {
   const redirect = returnUrl ? `<script>setTimeout(() => { window.location.href = ${JSON.stringify(returnUrl)}; }, 1500);</script>` : "";
   return new Response(
-    `<html><body style="font-family:sans-serif;text-align:center;padding:60px;">
+    `<html><head><meta charset="utf-8"></head><body style="font-family:sans-serif;text-align:center;padding:60px;">
       <h2>${ok ? "✓ Connected" : "Something went wrong"}</h2>
       <p>${message}</p>
       ${redirect}
     </body></html>`,
-    { headers: { "Content-Type": "text/html" } }
+    { headers: { "Content-Type": "text/html; charset=utf-8" } }
   );
 }
 
