@@ -50,7 +50,10 @@ Deno.serve(async (req) => {
       .eq("provider", "square")
       .maybeSingle();
 
-    if (stateErr || !pending) return htmlResponse("This authorization link is invalid or expired. Please try connecting again.", false);
+    if (stateErr || !pending) {
+      console.error("[square-oauth-callback] no matching oauth_states row", { state, stateErr });
+      return htmlResponse("This authorization link is invalid or expired. Please try connecting again.", false);
+    }
 
     await supabaseAdmin.from("oauth_states").delete().eq("state", state);
 

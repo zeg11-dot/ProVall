@@ -39,13 +39,21 @@ Deno.serve(async (req) => {
     const { returnUrl } = await req.json();
 
     const state = crypto.randomUUID();
-    await supabaseAdmin.from("oauth_states").insert({
+    const { error: stateInsertErr } = await supabaseAdmin.from("oauth_states").insert({
       state,
       business_id: user.id,
       provider: "square",
       return_url: returnUrl,
       created_at: new Date().toISOString(),
     });
+
+    if (stateInsertErr) {
+      console.error("[square-connect-onboard] could not save oauth_states row", stateInsertErr);
+      return new Response(JSON.stringify({ error: "Could not start Square connection. Please try again." }), {
+        status: 500,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
 
     const scopes = ["PAYMENTS_WRITE", "MERCHANT_PROFILE_READ"].join("+");
     const authorizeUrl =
