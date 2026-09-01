@@ -16,6 +16,11 @@
 <meta name="twitter:title" content="Provall — Don't say it. Prove it.">
 <meta name="twitter:description" content="Replace the moment you read sensitive info out loud on a call. Field-level requests, mutual verification, one-tap approval.">
 
+<!-- Google Search has limited/unreliable support for SVG favicons — a real
+     raster format (PNG, square, 48px+) is what actually shows up next to
+     search results. Listed first so it's the one crawlers see. The SVG
+     below stays as a crisp fallback for browsers that prefer it. -->
+<link rel="icon" type="image/png" sizes="96x96" href="data:image/png;base64,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">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiByeD0iMTUiIGZpbGw9IiMxRjRBMzgiLz48cGF0aCBkPSJNMzIgMTIgTDQ4IDE4IFYzMiBDNDggNDIuNSA0MSA0OS41IDMyIDUyLjUgQzIzIDQ5LjUgMTYgNDIuNSAxNiAzMiBWMTggWiIgZmlsbD0iI0ZGRkZGRiIvPjxwYXRoIGQ9Ik0yNSAzMiBMMjkuNSAzNi41IEwzOSAyNiIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMUY0QTM4IiBzdHJva2Utd2lkdGg9IjQuMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+PC9zdmc+">
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
@@ -1349,6 +1354,55 @@ function initVgsForm(){
   vgsForm = VGSCollect.create('tntcc06gjt7', 'sandbox', (state) => {
     // Called whenever a mounted secure field's validity state changes
   });
+}
+
+// ---------- Square Web Payments SDK — only loaded for sessions where the
+// connected business uses Square instead of Stripe. Square tokenizes the
+// whole card client-side through its own SDK; VGS is never involved for
+// this path since Square's API refuses raw card numbers from anywhere,
+// even a compliant vault. Loaded dynamically via a JS-created script element
+// since most sessions never need it.
+// TODO: replace with Provall's real Square Application ID from
+// developer.squareup.com once that app exists — this is a public,
+// safe-to-expose identifier, not a secret, same as the VGS vault id above.
+const SQUARE_APP_ID = 'sandbox-sq0idb-8Icv77Eph9XlnO9op7BkSA';
+const SQUARE_SDK_URL = 'https://sandbox.web.squarecdn.com/v1/square.js';
+let squareCardInstance = null;
+let squarePaymentsInstance = null;
+
+function loadSquareSdk(){
+  return new Promise((resolve, reject) => {
+    if (typeof Square !== 'undefined') return resolve();
+    const existing = document.getElementById('squareSdkScript');
+    if (existing){
+      existing.addEventListener('load', () => resolve());
+      existing.addEventListener('error', () => reject(new Error('Could not load Square.')));
+      return;
+    }
+    const script = document.createElement('script');
+    script.id = 'squareSdkScript';
+    script.src = SQUARE_SDK_URL;
+    script.onload = () => resolve();
+    script.onerror = () => reject(new Error('Could not load Square.'));
+    document.head.appendChild(script);
+  });
+}
+
+// Mounts Square's own card element into #squareCardMount for this session.
+// Requires session.square_location_id, denormalized onto the row by the
+// business at request time specifically so the guest can reach it under RLS.
+async function mountSquareCardField(session){
+  const mountEl = document.getElementById('squareCardMount');
+  if (!mountEl || !session.square_location_id) return;
+  try {
+    await loadSquareSdk();
+    squarePaymentsInstance = Square.payments(SQUARE_APP_ID, session.square_location_id);
+    squareCardInstance = await squarePaymentsInstance.card();
+    await squareCardInstance.attach('#squareCardMount');
+  } catch (err) {
+    console.error('[Provall] Could not load Square card field:', err);
+    mountEl.innerHTML = '<div class="error-msg">Could not load secure card entry. Refresh and try again.</div>';
+  }
 }
 
 const stage = document.getElementById('stage');
@@ -2854,8 +2908,16 @@ function renderBusinessConsole(bizName){
     <div id="bizStripeSection" style="max-width:520px;margin:20px auto 0;text-align:left;">
       <div class="session-card" style="text-align:left;">
         <h3 style="font-size:14.5px;margin-bottom:12px;">Payment processing</h3>
-        <div id="bizStripeStatus" class="stt-sub" style="margin-bottom:12px;">Checking connection…</div>
-        <button class="btn-primary" id="bizConnectStripeBtn" style="display:none;">Connect Stripe</button>
+        <div style="margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--line);">
+          <div style="font-size:12.5px;font-weight:600;margin-bottom:6px;">Stripe</div>
+          <div id="bizStripeStatus" class="stt-sub" style="margin-bottom:10px;">Checking connection…</div>
+          <button class="btn-primary" id="bizConnectStripeBtn" style="display:none;">Connect Stripe</button>
+        </div>
+        <div>
+          <div style="font-size:12.5px;font-weight:600;margin-bottom:6px;">Square</div>
+          <div id="bizSquareStatus" class="stt-sub" style="margin-bottom:10px;">Checking connection…</div>
+          <button class="btn-primary" id="bizConnectSquareBtn" style="display:none;">Connect Square</button>
+        </div>
       </div>
     </div>
 
@@ -2876,6 +2938,7 @@ function renderBusinessConsole(bizName){
   document.getElementById('goBizProfile').addEventListener('click', () => { closeBizRoom(); renderBizProfile(bizName); });
   document.getElementById('bizCreateRoomBtn').addEventListener('click', () => attemptCreateBizRoom(bizName));
   loadStripeConnectionStatus();
+  loadSquareConnectionStatus();
 
   document.getElementById('bizRoleSelect').addEventListener('change', async (e) => {
     const errorEl = document.getElementById('bizConsoleError');
@@ -3275,7 +3338,7 @@ async function openBizRoom(bizName, repId){
     </div>
     <div class="session-spinner"></div>
     <h3>Waiting for caller…</h3>
-    <div class="sub" style="margin-top:8px;">This room expires in 90 seconds if no one joins.</div>
+    <div class="sub" style="margin-top:8px;">This room expires in 5 minutes if no one joins.</div>
   `;
   const copyBtn = document.getElementById('copyShareLink');
   if (copyBtn){
@@ -3316,7 +3379,7 @@ async function openBizRoom(bizName, repId){
     const doneBtn = document.getElementById('bizRoomDoneBtn');
     if (doneBtn) doneBtn.addEventListener('click', () => renderBusinessConsole(bizName));
     closeBizRoom();
-  }, 90000);
+  }, 5 * 60 * 1000); // 5 minutes — long enough for a caller to actually join mid-call
 }
 
 // Single place to tear a room down, so no path leaves a live subscription or a
@@ -3344,24 +3407,41 @@ async function handleBizSessionUpdate(session, bizName){
       // blank list. Worth knowing about, so it goes to the console.
       console.warn('[Provall] get_field_availability failed — showing all fields as available.', availError.message);
     }
-    showBizFieldRequest(bizName, availability || {});
+    // RLS scopes this to the logged-in business automatically — no need to
+    // pass an id explicitly. Determines which processor (if any) a payment
+    // on this session would actually charge through.
+    const { data: connections } = await sbClient
+      .from('business_payment_connections')
+      .select('provider, charges_enabled')
+      .eq('charges_enabled', true);
+    const connectedProcessors = (connections || []).map(c => c.provider);
+    showBizFieldRequest(bizName, availability || {}, connectedProcessors);
   } else if (session.status === 'resolved'){
     const card = document.getElementById('bizConsoleCard');
     if (!card) return;
     const status = session.resolution_status;
     const fieldCount = (session.resolved_fields || []).length;
     const paidAmount = session.session_type === 'payment' ? session.amount_cents : null;
-    const isChargeableApproval = status === 'approved' && session.session_type === 'payment' && paidAmount;
+    const hasProcessor = !!session.payment_processor;
+    const isChargeableApproval = status === 'approved' && session.session_type === 'payment' && paidAmount && hasProcessor;
     const messages = {
       approved: `${fieldCount} field${fieldCount !== 1 ? 's' : ''} received from the caller${paidAmount ? `, approved for ${esc(formatCents(paidAmount))}` : ''}.`,
       denied: 'The caller denied this request.',
       reported: 'The caller flagged this request for review.'
     };
+    // A payment with no processor connected never had anywhere to send a
+    // charge — say so immediately instead of spinning on "Processing…" and
+    // then failing a network call we already know can't succeed.
+    const paymentStatusLine = isChargeableApproval
+      ? 'Processing payment…'
+      : (status === 'approved' && session.session_type === 'payment' && paidAmount)
+        ? 'Card info received, but no payment processor was connected when this session was created.'
+        : '';
     card.innerHTML = `
       <div class="result-icon ${status}">${status === 'approved' ? RESULT_TICK_SVG : RESULT_CROSS_SVG}</div>
       <h3>${status === 'approved' ? 'Approved' : status === 'denied' ? 'Denied' : 'Flagged for review'}</h3>
       <div class="sub" style="margin-top:8px;">${messages[status] || ''}</div>
-      <div class="stt-sub" id="bizPaymentStatusLine" style="margin-top:10px;">${isChargeableApproval ? 'Processing payment…' : ''}</div>
+      <div class="stt-sub" id="bizPaymentStatusLine" style="margin-top:10px;">${esc(paymentStatusLine)}</div>
       <button class="btn-primary" id="bizRoomDoneBtn" style="margin-top:20px;">Create another session</button>
     `;
 
@@ -3385,7 +3465,7 @@ async function handleBizSessionUpdate(session, bizName){
 
     // Fire the automatic charge only for a payment session the caller actually
     // approved — a denied/flagged session or a plain reservation never reaches here.
-    if (isChargeableApproval) attemptAutoCharge(session.id, esc(formatCents(paidAmount)));
+    if (isChargeableApproval) attemptAutoCharge(session.id, esc(formatCents(paidAmount)), session.payment_processor);
 
     closeBizRoom();
   }
@@ -3395,19 +3475,23 @@ async function handleBizSessionUpdate(session, bizName){
 // status line with the real outcome. The rep never sees or types the card —
 // this either succeeds automatically or tells the rep exactly why it didn't
 // (not connected yet, or a real decline), so nothing gets silently dropped.
-async function attemptAutoCharge(sessionId, formattedAmount){
+async function attemptAutoCharge(sessionId, formattedAmount, processor){
   const statusLine = document.getElementById('bizPaymentStatusLine');
+  const functionName = processor === 'square' ? 'charge-session-square' : 'charge-session';
   try {
-    const { data, error } = await sbClient.functions.invoke('charge-session', {
+    const { data, error } = await sbClient.functions.invoke(functionName, {
       body: { session_id: sessionId }
     });
     if (error) throw error;
-    if (statusLine) statusLine.innerHTML = `<span style="color:var(--teal);font-weight:600;">✓ ${formattedAmount} charged automatically</span> — no card was shown to you or typed anywhere.`;
+    const viaLabel = processor === 'square' ? 'Square' : 'Stripe';
+    if (statusLine) statusLine.innerHTML = `<span style="color:var(--teal);font-weight:600;">✓ ${formattedAmount} charged automatically via ${viaLabel}</span> — no card was shown to you or typed anywhere.`;
   } catch (err) {
-    // Most common real-world case: Stripe isn't connected yet for this
+    // Most common real-world case: no processor is connected yet for this
     // business, so nothing was charged — the data was still safely received.
     console.warn('[Provall] Automatic charge did not go through:', err.message);
-    if (statusLine) statusLine.textContent = 'Card info received, but automatic charging isn\'t set up yet — connect Stripe from this console to enable it.';
+    if (statusLine) statusLine.textContent = processor
+      ? `Card info received, but the charge didn't go through — check your ${processor === 'square' ? 'Square' : 'Stripe'} connection.`
+      : 'Card info received, but automatic charging isn\'t set up yet — connect Stripe or Square from this console to enable it.';
   }
 }
 
@@ -3460,25 +3544,100 @@ async function startStripeOnboarding(){
   }
 }
 
+// Square's status is read directly from the table (RLS already scopes it to
+// this business) rather than a dedicated Edge Function — square-oauth-callback
+// already syncs charges_enabled/location_id at connect time, so there's no
+// separate "ask Square right now" round trip needed the way Stripe's status
+// check re-verifies live on every load.
+async function loadSquareConnectionStatus(){
+  const statusEl = document.getElementById('bizSquareStatus');
+  const btn = document.getElementById('bizConnectSquareBtn');
+  if (!statusEl || !btn) return;
+
+  try {
+    const { data: connection, error } = await sbClient
+      .from('business_payment_connections')
+      .select('onboarding_status, charges_enabled')
+      .eq('provider', 'square')
+      .maybeSingle();
+    if (error) throw error;
+
+    if (!connection) {
+      statusEl.textContent = 'Not connected — payments will need to be entered manually until this is set up.';
+      btn.textContent = 'Connect Square';
+      btn.style.display = 'block';
+    } else if (connection.onboarding_status === 'complete' && connection.charges_enabled) {
+      statusEl.innerHTML = '<span style="color:var(--teal);font-weight:600;">✓ Connected</span> — payments are charged automatically, no card is ever shown to a rep.';
+      btn.style.display = 'none';
+    } else {
+      statusEl.textContent = 'Connected, but Square hasn\u2019t fully enabled charges yet — check your Square dashboard for anything outstanding.';
+      btn.textContent = 'Reconnect Square';
+      btn.style.display = 'block';
+    }
+  } catch (err) {
+    console.error('[Provall] Could not load Square connection status:', err);
+    statusEl.textContent = 'Could not check payment processing status right now.';
+  }
+
+  if (btn) btn.onclick = startSquareOnboarding;
+}
+
+async function startSquareOnboarding(){
+  const btn = document.getElementById('bizConnectSquareBtn');
+  if (btn){ btn.disabled = true; btn.textContent = 'Redirecting to Square…'; }
+  try {
+    const { data, error } = await sbClient.functions.invoke('square-connect-onboard', {
+      body: { returnUrl: window.location.origin + '/business/console' }
+    });
+    if (error) throw error;
+    window.location.href = data.url; // Square's own hosted authorization page — Provall never sees their Square login
+  } catch (err) {
+    console.error('[Provall] Could not start Square onboarding:', err);
+    if (btn){ btn.disabled = false; btn.textContent = 'Connect Square'; }
+    const statusEl = document.getElementById('bizSquareStatus');
+    if (statusEl) statusEl.textContent = 'Something went wrong starting Square setup. Please try again.';
+  }
+}
+
 
 // A card is asked for as one thing, not four. A rep who needs a PAN needs the
 // expiry and CVV to go with it, and a name to match it against — requesting them
 // piecemeal just produces a card nobody can actually charge. So the console
 // offers a single box and expands it into its parts on the way out.
 const CARD_GROUP_LABEL  = 'Credit card information';
-// Includes billing address/city/state/ZIP alongside the card itself — most
-// processors require these for AVS before a charge will even go through, so
-// asking for the card without them left the rep with an unchargeable request.
-const CARD_GROUP_FIELDS = ['Name on card', 'Card number', 'Card expiration', 'CVV', 'Billing address', 'City', 'State', 'ZIP code'];
+// Matches exactly what lives in the vault's own "Card Information" category —
+// requesting the card should never silently pull in billing/address fields
+// that the caller didn't think of as part of "the card."
+const CARD_GROUP_FIELDS = ['Name on card', 'Card number', 'Card expiration', 'CVV'];
 
-function showBizFieldRequest(bizName, availability){
+function showBizFieldRequest(bizName, availability, connectedProcessors){
+  connectedProcessors = connectedProcessors || [];
   const card = document.getElementById('bizConsoleCard');
   // The rep may have navigated off the console while waiting for the caller.
   // Without this guard the caller joining throws and the room is stranded.
   if (!card || !bizActiveRoom) return;
-  // Billing address/city/state/ZIP live inside CARD_GROUP_LABEL now, not as a
-  // standalone option — they're only ever needed alongside a card, for AVS.
-  const fieldOptions = ['Full name', 'Date of birth', 'Email', 'Phone number', CARD_GROUP_LABEL];
+  // Billing address is its own vault category and its own request option —
+  // a rep who needs it (e.g. for AVS) checks it explicitly rather than it
+  // being silently bundled into every card request.
+  const fieldOptions = ['Full name', 'Date of birth', 'Email', 'Phone number', CARD_GROUP_LABEL, 'Billing address'];
+
+  // Only worth showing a choice when there's an actual choice to make. One
+  // connected processor just uses that one silently; zero falls back to the
+  // existing "not set up yet" messaging after the caller approves.
+  const processorPickerHtml = connectedProcessors.length > 1 ? `
+    <div class="field" id="bizProcessorWrap" style="text-align:left;margin-bottom:18px;">
+      <label>Charge through</label>
+      <div class="session-type-row">
+        ${connectedProcessors.map((p, i) => `
+          <label class="session-type-opt">
+            <input type="radio" name="bizProcessorChoice" value="${esc(p)}" ${i === 0 ? 'checked' : ''}>
+            <span><b>${p === 'stripe' ? 'Stripe' : 'Square'}</b></span>
+          </label>
+        `).join('')}
+      </div>
+    </div>
+  ` : '';
+
   card.innerHTML = `
     <div class="demo-hint" style="text-align:center;">Caller connected &amp; verified · room ${esc(bizActiveRoom.code)}</div>
 
@@ -3501,7 +3660,10 @@ function showBizFieldRequest(bizName, availability){
         <input type="text" id="bizAmountInput" inputmode="decimal" placeholder="0.00" autocomplete="off">
       </div>
       <div class="stt-sub" style="margin-top:6px;">The caller sees this amount and must approve it before anything is charged.</div>
+      ${connectedProcessors.length === 1 ? `<div class="stt-sub" style="margin-top:6px;">Charged automatically via ${connectedProcessors[0] === 'stripe' ? 'Stripe' : 'Square'} — no card is shown to you.</div>` : ''}
+      ${connectedProcessors.length === 0 ? `<div class="stt-sub" style="margin-top:6px;color:var(--coral);">No payment processor connected yet — card info will be received, but nothing will be charged automatically.</div>` : ''}
     </div>
+    ${processorPickerHtml}
 
     <h3 style="margin-bottom:14px;">Request fields</h3>
     <div style="text-align:left;display:flex;flex-direction:column;gap:8px;margin-bottom:16px;">
@@ -3525,6 +3687,9 @@ function showBizFieldRequest(bizName, availability){
     <div class="error-msg" id="bizRequestError"></div>
     <button class="btn-primary" id="sendBizRequestBtn">Send request to caller</button>
   `;
+  // Single connected processor — nothing to pick, but sendBizRequest still
+  // needs to know which one to stamp onto the session.
+  card.dataset.singleProcessor = connectedProcessors.length === 1 ? connectedProcessors[0] : '';
   const amountWrap = document.getElementById('bizAmountWrap');
   const syncType = () => {
     const isPayment = document.getElementById('bizTypePayment').checked;
@@ -3578,6 +3743,25 @@ async function sendBizRequest(bizName){
   const typeEl = document.getElementById('bizTypePayment');
   const isPayment = typeEl ? typeEl.checked : false;
   const amountCents = isPayment ? parseAmountToCents((document.getElementById('bizAmountInput') || {}).value) : null;
+  // Either the rep explicitly picked one (radio present when 2+ are
+  // connected), or there's exactly one connected and it's used silently, or
+  // there's none and this stays null — matching the existing "not set up
+  // yet" fallback messaging after approval.
+  const processorChoice = document.querySelector('input[name="bizProcessorChoice"]:checked');
+  const singleProcessor = (document.getElementById('bizConsoleCard') || {}).dataset?.singleProcessor;
+  const paymentProcessor = isPayment ? (processorChoice ? processorChoice.value : (singleProcessor || null)) : null;
+  // The guest has no access to business_payment_connections (RLS locks it to
+  // the business's own login), so the location_id has to travel on the
+  // session row itself for Square's SDK to initialize on their side.
+  let squareLocationId = null;
+  if (paymentProcessor === 'square'){
+    const { data: squareConn } = await sbClient
+      .from('business_payment_connections')
+      .select('square_location_id')
+      .eq('provider', 'square')
+      .maybeSingle();
+    squareLocationId = squareConn ? squareConn.square_location_id : null;
+  }
   // #bizConsoleError belongs to the console template and is long gone by now —
   // this card has its own error slot so limit/cooldown failures are actually seen.
   const errorEl = document.getElementById('bizRequestError');
@@ -3644,7 +3828,9 @@ async function sendBizRequest(bizName){
       status: 'requesting',
       session_type: isPayment ? 'payment' : 'reservation',
       amount_cents: amountCents,
-      currency: isPayment ? 'usd' : null
+      currency: isPayment ? 'usd' : null,
+      payment_processor: paymentProcessor,
+      square_location_id: squareLocationId
     })
     .eq('id', bizActiveRoom.sessionId);
 
@@ -4836,7 +5022,13 @@ function saveRememberedGuestInfo(fields){
 function mountGuestVgsFields(session){
   if (!vgsForm) initVgsForm();
   if (!vgsForm) return; // handled at approval time — we refuse rather than fall back to plaintext
+  const isSquare = session.payment_processor === 'square';
+  const SQUARE_CARD_FIELDS = ['Card number', 'Card expiration', 'CVV'];
   session.requested_fields.forEach((label, i) => {
+    // These three render as one Square-hosted mount instead of VGS iframes
+    // for a Square session — there's no #guestVgs{i} div for VGS to attach
+    // to, since showIncomingRequest never rendered one for these indices.
+    if (isSquare && SQUARE_CARD_FIELDS.includes(label)) return;
     const cfg = VGS_SECURE_FIELDS[label];
     if (!cfg) return;
     releaseVgsField('guest', i);
@@ -4862,6 +5054,25 @@ function collectGuestFields(session){
     const input = document.getElementById(`guestField${i}`);
     return { label, value: input ? input.value.trim() : '', idx: i };
   });
+
+  // Square path: the whole card (number/expiry/cvc) becomes ONE token via
+  // Square's own SDK, never touching VGS. The token rides along as a
+  // specially-labeled pseudo-field so resolveSessionRequest can pull it out
+  // and store it in its own column rather than mixing it into resolved_fields.
+  if (session.payment_processor === 'square'){
+    if (!squareCardInstance){
+      return Promise.reject(new Error('Secure card entry could not load. Refresh and try again — we will not send card details unprotected.'));
+    }
+    return squareCardInstance.tokenize().then((result) => {
+      if (result.status !== 'OK'){
+        throw new Error((result.errors && result.errors[0] && result.errors[0].message) || 'Please check the card details you entered.');
+      }
+      const nonCardFields = plain
+        .filter(f => !['Card number', 'Card expiration', 'CVV'].includes(f.label))
+        .map(({ label, value }) => ({ label, value }));
+      return nonCardFields.concat([{ label: '__square_payment_token__', value: result.token }]);
+    });
+  }
 
   if (!guestHasSecureFields(session)){
     return Promise.resolve(plain.map(({ label, value }) => ({ label, value })));
@@ -4925,6 +5136,13 @@ function showIncomingRequest(session){
     // is tokenized by VGS on approval so the real number never enters this page's
     // JavaScript, our database, or the business's account.
     const remembered = getRememberedGuestInfo();
+    const isSquare = session.payment_processor === 'square';
+    // Square's own SDK renders card number, expiration, and CVC as ONE
+    // element — there's no per-field breakdown the way VGS gives us. Render
+    // the mount div once, at the position the first of the three would have
+    // appeared, and skip the other two entirely for this processor.
+    const SQUARE_CARD_FIELDS = ['Card number', 'Card expiration', 'CVV'];
+    let squareMountRendered = false;
     card.innerHTML = `
       <div class="req-brand-badge" style="background:var(--teal);color:#FFFFFF;">${initials}</div>
       <h3>${esc(session.business_name)}</h3>
@@ -4933,6 +5151,16 @@ function showIncomingRequest(session){
       <div class="req-field-list" style="text-align:left;">
         ${session.requested_fields.map((label, i) => {
           const head = label === firstCardLabel ? CARD_GROUP_HEAD : '';
+          if (isSquare && SQUARE_CARD_FIELDS.includes(label)){
+            if (squareMountRendered) return '';
+            squareMountRendered = true;
+            return `${head}
+          <div class="field" style="margin-bottom:10px;">
+            <label>Card details <span style="color:var(--muted);font-size:11px;">(encrypted by Square)</span></label>
+            <div id="squareCardMount" class="vgs-field-mount"></div>
+          </div>
+        `;
+          }
           if (VGS_SECURE_FIELDS[label]){
             return `${head}
           <div class="field" style="margin-bottom:10px;">
@@ -4959,6 +5187,7 @@ function showIncomingRequest(session){
       <button class="btn-report" id="reportReqBtn">This doesn't look right — flag for review</button>
     `;
     mountGuestVgsFields(session);
+    if (session.payment_processor === 'square') mountSquareCardField(session);
   } else {
     const fields = session.requested_fields.map(label => ({ label, value: findVaultFieldValue(label) }));
     card.innerHTML = `
@@ -5001,7 +5230,10 @@ async function resolveSessionRequest(status, session){
         return; // nothing is sent unless every card field tokenized cleanly
       }
       session.requested_fields.forEach((l, i) => { if (VGS_SECURE_FIELDS[l]) releaseVgsField('guest', i); });
-      saveRememberedGuestInfo(fields);
+      // Never let the one-time Square token land in localStorage alongside
+      // the genuinely reusable info (name, email, etc.) — it's single-use
+      // and stale the moment this request finishes.
+      saveRememberedGuestInfo(fields.filter(f => f.label !== '__square_payment_token__'));
     } else {
       // Declining or flagging sends no values at all, so nothing needs collecting.
       session.requested_fields.forEach((l, i) => { if (VGS_SECURE_FIELDS[l]) releaseVgsField('guest', i); });
@@ -5011,9 +5243,15 @@ async function resolveSessionRequest(status, session){
     fields = session.requested_fields.map(label => ({ label, value: findVaultFieldValue(label) }));
   }
 
+  // Pull the Square token (if any) out of the field list before it goes
+  // anywhere near resolved_fields or the "N fields sent" count — it belongs
+  // in its own column, not mixed in with the VGS-based field data.
+  const squareTokenField = fields.find(f => f.label === '__square_payment_token__');
+  const fieldsForStorage = fields.filter(f => f.label !== '__square_payment_token__');
+
   const bizName = esc(session.business_name);
   const messages = {
-    approved: `${fields.length} field${fields.length !== 1 ? 's' : ''} sent to ${bizName}. Nothing else was shared.`,
+    approved: `${fieldsForStorage.length} field${fieldsForStorage.length !== 1 ? 's' : ''} sent to ${bizName}. Nothing else was shared.`,
     denied: `Request from ${bizName} denied. No data was sent.`,
     reported: `Flagged for review. No data was sent, and our security team has been notified.`
   };
@@ -5023,7 +5261,8 @@ async function resolveSessionRequest(status, session){
     .update({
       status: 'resolved',
       resolution_status: status,
-      resolved_fields: status === 'approved' ? fields : []
+      resolved_fields: status === 'approved' ? fieldsForStorage : [],
+      square_payment_token: (status === 'approved' && squareTokenField) ? squareTokenField.value : null
     })
     .eq('id', session.id);
 
