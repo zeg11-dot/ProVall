@@ -4,7 +4,16 @@
 // Exchanges the one-time code for real access/refresh tokens, looks up the
 // business's actual Square location ID, and stores everything against the
 // business identified by the state value — hit directly by the browser via
-// redirect (GET), so it renders HTML, not JSON. Deploy with --no-verify-jwt.
+// redirect (GET). Deploy with --no-verify-jwt.
+//
+// This always finishes with a real HTTP redirect (302) straight back to the
+// business console rather than rendering an HTML "Connected!" page itself —
+// Supabase's function gateway was not reliably serving a custom
+// Content-Type on a hand-built HTML body (browsers were rendering the raw
+// markup as plain text instead of parsing it), so an interstitial page
+// isn't safe to rely on here. The console already checks Square's
+// connection status live on load, so nothing is lost — same pattern
+// Stripe's onboarding return already uses.
 
 import { createClient } from "npm:@supabase/supabase-js@2";
 
@@ -21,16 +30,14 @@ const SQUARE_API_HOST = SQUARE_ENV === "production"
   : "https://connect.squareupsandbox.com";
 const SQUARE_VERSION = "2025-01-23";
 
-function htmlResponse(message: string, ok: boolean, returnUrl?: string) {
-  const redirect = returnUrl ? `<script>setTimeout(() => { window.location.href = ${JSON.stringify(returnUrl)}; }, 1500);</script>` : "";
-  return new Response(
-    `<html><head><meta charset="utf-8"></head><body style="font-family:sans-serif;text-align:center;padding:60px;">
-      <h2>${ok ? "✓ Connected" : "Something went wrong"}</h2>
-      <p>${message}</p>
-      ${redirect}
-    </body></html>`,
-    { headers: { "Content-Type": "text/html; charset=utf-8" } }
-  );
+// Used only when we don't yet know the business's actual return_url (e.g.
+// the state row can't be found at all) — best-effort landing spot.
+const FALLBACK_RETURN_URL = "https://provall.org/business/console";
+
+function redirectTo(baseUrl: string, params: Record<string, string>) {
+  const target = new URL(baseUrl);
+  for (const [key, value] of Object.entries(params)) target.searchParams.set(key, value);
+  return new Response(null, { status: 302, headers: { Location: target.toString() } });
 }
 
 Deno.serve(async (req) => {
@@ -40,8 +47,12 @@ Deno.serve(async (req) => {
     const state = url.searchParams.get("state");
     const errorParam = url.searchParams.get("error");
 
-    if (errorParam) return htmlResponse("Square authorization was cancelled or denied.", false);
-    if (!code || !state) return htmlResponse("Missing authorization code from Square.", false);
+    if (errorParam) {
+      return redirectTo(FALLBACK_RETURN_URL, { square_error: "denied" });
+    }
+    if (!code || !state) {
+      return redirectTo(FALLBACK_RETURN_URL, { square_error: "missing_code" });
+    }
 
     const { data: pending, error: stateErr } = await supabaseAdmin
       .from("oauth_states")
@@ -52,7 +63,7 @@ Deno.serve(async (req) => {
 
     if (stateErr || !pending) {
       console.error("[square-oauth-callback] no matching oauth_states row", { state, stateErr });
-      return htmlResponse("This authorization link is invalid or expired. Please try connecting again.", false);
+      return redirectTo(FALLBACK_RETURN_URL, { square_error: "invalid_state" });
     }
 
     await supabaseAdmin.from("oauth_states").delete().eq("state", state);
@@ -71,7 +82,7 @@ Deno.serve(async (req) => {
 
     if (!tokenResp.ok) {
       console.error("[square-oauth-callback] token exchange failed", tokenData);
-      return htmlResponse("Square couldn't confirm the connection. Please try again.", false, pending.return_url);
+      return redirectTo(pending.return_url || FALLBACK_RETURN_URL, { square_error: "token_exchange_failed" });
     }
 
     const locResp = await fetch(`${SQUARE_API_HOST}/v2/locations`, {
@@ -96,9 +107,9 @@ Deno.serve(async (req) => {
       updated_at: new Date().toISOString(),
     }, { onConflict: "business_id,provider" });
 
-    return htmlResponse("Your Square account is connected. Redirecting you back…", true, pending.return_url);
+    return redirectTo(pending.return_url || FALLBACK_RETURN_URL, { square_connected: "true" });
   } catch (err) {
     console.error("[square-oauth-callback]", err);
-    return htmlResponse("Something unexpected went wrong. Please try again.", false);
+    return redirectTo(FALLBACK_RETURN_URL, { square_error: "unexpected" });
   }
 });
