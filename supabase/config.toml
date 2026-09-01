@@ -37,3 +37,6 @@ verify_jwt = true
 
 [functions.square-connect-onboard]
 verify_jwt = true
+
+[functions.charge-session-square]
+verify_jwt = true
